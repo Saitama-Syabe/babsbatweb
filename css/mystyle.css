@@ -1,0 +1,25 @@
+.nav a:hover {
+    color: #a07404 !important;
+	font-weight:bold;
+}
+
+.header-nav .nav > li.active > a {
+	color: #a07404 !important;
+	font-weight:bold;
+}
+.site-button:active,
+.site-button:hover,
+.site-button:focus,
+.active > .site-button { 
+	background-color:#0a781d !important; 
+	color: #fff; 
+}
+
+.widget_social_inks li a:hover{
+	background-color:#fff !important;
+	color:#0a781d;
+}
+
+.header-style-3 .is-fixed.color-fill .main-bar{
+	background-color:#fff;
+}
