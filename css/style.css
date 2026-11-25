@@ -190,22 +190,6 @@ p { margin: 0; }
 .hero__text { flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 10px; }
 
-/* Photo vue à travers un appareil de briques */
-.wall { flex: 2 1 520px; min-width: 0; position: relative; aspect-ratio: 16 / 9; overflow: hidden; container-type: inline-size; }
-.wall > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.wall__courses { position: absolute; inset: 0; display: flex; flex-direction: column; border-top: 6px solid var(--brick); border-right: 6px solid var(--brick); }
-.course { flex: 1; border-bottom: 6px solid var(--brick); background-image: linear-gradient(90deg, var(--brick) 0 6px, transparent 6px); background-size: 25% 100%; }
-.course.off { background-position: 16.667% 0; }
-.wb__big { font-size: 3.1cqw; white-space: nowrap; }
-.wb__small { font-size: 1.5cqw; }
-.wb__xl { font-size: 4.6cqw; }
-.wb__md { font-size: 3.6cqw; }
-.wb {
-  position: absolute; width: 25%; height: 16.667%;
-  border-left: 6px solid var(--brick); border-bottom: 6px solid var(--brick); background-clip: padding-box;
-  display: flex; flex-direction: column; justify-content: center; padding: 0 4%; line-height: 1;
-}
-
 /* Bandeau métiers */
 .ticker { padding-top: 20px; padding-bottom: 20px; display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center; font-size: 22px; line-height: 1.2; }
 .ticker i { width: 18px; height: 9px; background: var(--orange); }
@@ -552,13 +536,6 @@ body.lb-open { overflow: hidden; }
 .card .card__label { margin-bottom: 6px; }
 
 @media (max-width: 560px) {
-  /* Photo du héros : cadre plus haut et étiquettes lisibles */
-  .wall { aspect-ratio: 4 / 3; }
-  .wb { padding: 0 3%; }
-  .wb__big { font-size: max(12px, 5.2cqw); }
-  .wb__small { display: none; }
-  .wb__xl { font-size: max(14px, 7cqw); }
-  .wb__md { font-size: max(12px, 5.4cqw); }
 
   /* Recette : « 10 % » tient dans sa case */
   .recipe { height: 80px; gap: 4px; }
@@ -590,3 +567,33 @@ body.lb-open { overflow: hidden; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2s; } }
+
+/* ---------- Film de présentation (héros de l'accueil) ---------- */
+.hero-film {
+  flex: 2 1 520px; min-width: 0; position: relative; aspect-ratio: 16 / 9;
+  background: var(--paper); border: 6px solid var(--ink); box-shadow: 10px 10px 0 var(--ink);
+}
+.hero-film__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-film__play {
+  position: absolute; left: 16px; bottom: 16px;
+  display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 10px 16px;
+  background: var(--orange); color: var(--ink); border: 2px solid var(--ink); border-radius: 0;
+  font: 700 16px var(--font-body); cursor: pointer; box-shadow: 4px 4px 0 var(--ink);
+}
+.hero-film__play:hover { background: var(--orange-light); }
+.hero-film__play:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
+.hero-film__icon { width: 0; height: 0; border-left: 12px solid currentColor; border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
+.hero-film__dur { font: 600 14px var(--font-label); letter-spacing: 1px; text-transform: uppercase; padding-left: 10px; border-left: 2px solid var(--ink); }
+
+/* Lecteur plein écran */
+.film-dialog__stage { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 0 16px 16px; }
+.film-dialog__video {
+  display: block; background: #000; aspect-ratio: 16 / 9;
+  width: min(100%, calc((100dvh - 110px) * 16 / 9)); max-height: calc(100dvh - 110px);
+}
+
+@media (max-width: 560px) {
+  .hero-film { border-width: 4px; box-shadow: 6px 6px 0 var(--ink); }
+  .hero-film__play { left: 8px; bottom: 8px; min-height: 42px; padding: 8px 12px; font-size: 14px; gap: 8px; }
+  .hero-film__long { display: none; }
+}

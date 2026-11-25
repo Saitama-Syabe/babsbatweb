@@ -116,6 +116,14 @@ const NAV = [
  */
 define('VIDEO_BASE_URL', rtrim(env('VIDEO_BASE_URL', 'https://minio-files.kronyxtech.com/other.bucket/video'), '/'));
 
+/** Film de présentation affiché dans le héros de l'accueil. */
+define('FILM', [
+    'src'      => VIDEO_BASE_URL . '/La_terre_devient_maison.mp4',
+    'poster'   => 'img/film-poster.jpg',
+    'title'    => 'La terre devient maison',
+    'duration' => '45 s',
+]);
+
 define('VIDEOS', [
     ['src' => VIDEO_BASE_URL . '/video-1.mp4', 'caption' => 'La latérite, matière première de nos briques',        'fit' => 'cover'],
     ['src' => VIDEO_BASE_URL . '/video-2.mp4', 'caption' => 'Des milliers de briques BTCS en séchage',             'fit' => 'contain'],

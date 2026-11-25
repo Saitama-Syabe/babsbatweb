@@ -22,25 +22,32 @@ require __DIR__ . '/includes/header.php';
           <a href="./#matiere" class="btn btn--outline-light">Découvrir la BTCS ↓</a>
         </div>
       </div>
-      <div class="wall">
-        <img src="img/render-carport.jpg" alt="Villas BAB'S-BAT en BTCS à Songon, vues à travers un appareillage de briques" fetchpriority="high">
-        <div class="wall__courses" aria-hidden="true">
-          <div class="course"></div><div class="course off"></div><div class="course"></div><div class="course off"></div><div class="course"></div><div class="course off"></div>
-        </div>
-        <div class="wb" style="left: 62.5%; top: 16.667%; background-color: var(--orange); color: var(--ink)">
-          <span class="dsp wb__big">75 M FCFA</span>
-          <span class="mono wb__small">Villa clé en main</span>
-        </div>
-        <div class="wb" style="left: 0; top: 66.667%; background-color: var(--green); color: #fff">
-          <span class="dsp wb__xl">BTCS</span>
-        </div>
-        <div class="wb" style="left: 37.5%; top: 83.333%; background-color: var(--paper); color: var(--ink)">
-          <span class="dsp wb__md">Songon</span>
-        </div>
+      <!-- Film de présentation : lecture muette en boucle, bouton pour le voir avec le son -->
+      <div class="hero-film" data-film>
+        <video class="hero-film__video" src="<?= e(FILM['src']) ?>" poster="<?= e(FILM['poster']) ?>"
+               muted loop playsinline preload="metadata" data-film-preview
+               aria-label="<?= e(FILM['title']) ?> : aperçu muet du film"></video>
+        <button type="button" class="hero-film__play" data-film-open aria-haspopup="dialog">
+          <span class="hero-film__icon" aria-hidden="true"></span>
+          <span>Voir le film<span class="hero-film__long"> avec le son</span></span> <span class="hero-film__dur"><?= e(FILM['duration']) ?></span>
+        </button>
       </div>
     </div>
   </div>
 </section>
+
+<!-- Lecteur plein écran du film -->
+<dialog class="lightbox film-dialog" data-film-dialog aria-label="<?= e(FILM['title']) ?>">
+  <div class="lightbox__bar">
+    <span class="mono"><?= e(FILM['title']) ?></span>
+    <button type="button" class="lightbox__btn" data-film-close aria-label="Fermer le film">✕</button>
+  </div>
+  <div class="film-dialog__stage">
+    <video class="film-dialog__video" controls playsinline preload="none" poster="<?= e(FILM['poster']) ?>" data-film-full>
+      <source src="<?= e(FILM['src']) ?>" type="video/mp4">
+    </video>
+  </div>
+</dialog>
 
 <!-- Bandeau métiers -->
 <div class="t-ink">

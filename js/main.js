@@ -167,6 +167,58 @@
     });
   }
 
+  /* Film de présentation (héros de l'accueil) */
+  var preview = document.querySelector('[data-film-preview]');
+  var filmDlg = document.querySelector('[data-film-dialog]');
+  if (preview) {
+    var conn = navigator.connection || {};
+    var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches || conn.saveData === true;
+    // Aperçu muet : lecture seulement quand le héros est visible (sinon pause, pour économiser batterie et données)
+    if (!calm && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting && !(filmDlg && filmDlg.open)) {
+            var p = preview.play();
+            if (p && p.catch) p.catch(function () {}); // lecture auto refusée : l'image d'aperçu reste
+          } else {
+            preview.pause();
+          }
+        });
+      }, { threshold: 0.25 }).observe(preview);
+    }
+  }
+  if (filmDlg && typeof filmDlg.showModal === 'function') {
+    var full = filmDlg.querySelector('[data-film-full]');
+    var opener = document.querySelector('[data-film-open]');
+    var openFilm = function () {
+      if (preview) preview.pause();
+      filmDlg.showModal();
+      document.body.classList.add('lb-open');
+      full.currentTime = 0;
+      var p = full.play();
+      if (p && p.catch) p.catch(function () {});
+    };
+    if (opener) opener.addEventListener('click', openFilm);
+    filmDlg.querySelector('[data-film-close]').addEventListener('click', function () { filmDlg.close(); });
+    filmDlg.addEventListener('click', function (e) {
+      if (e.target === filmDlg || e.target.classList.contains('film-dialog__stage')) filmDlg.close();
+    });
+    filmDlg.addEventListener('close', function () {
+      full.pause();
+      document.body.classList.remove('lb-open');
+      if (opener) opener.focus();
+      if (preview && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var p = preview.play();
+        if (p && p.catch) p.catch(function () {});
+      }
+    });
+  } else if (document.querySelector('[data-film-open]')) {
+    // Navigateur sans <dialog> : le bouton ouvre simplement la vidéo
+    document.querySelector('[data-film-open]').addEventListener('click', function () {
+      window.location.href = preview ? preview.currentSrc || preview.src : '#';
+    });
+  }
+
   /* Indicateur de chargement du formulaire de devis (bouton « Envoi en cours… », anti double-clic) */
   function setLoading(form, on) {
     var btn = form.querySelector('[type="submit"]');
