@@ -48,13 +48,33 @@ function env(string $key, string $default = ''): string
 /** Adresse qui reçoit les demandes de devis. */
 define('CONTACT_TO', env('CONTACT_TO', 'bas@babsbatsarl-ci.com'));
 
+/**
+ * Normalise SMTP_SECURE et le met en cohérence avec le port :
+ *  - 465 = chiffrement immédiat (ssl / SMTPS), 587 et 2525 = STARTTLS (tls)
+ *  - accepte aussi true / 1 / yes / starttls / smtps / false / off…
+ */
+function smtp_secure(string $value, int $port): string
+{
+    $v = strtolower(trim($value));
+    if (in_array($v, ['none', 'false', '0', 'off', 'no'], true)) {
+        return 'none';
+    }
+    if ($port === 465) {
+        return 'ssl';                // le port 465 n'accepte que le chiffrement immédiat
+    }
+    if (in_array($port, [587, 2525], true)) {
+        return 'tls';                // ces ports n'acceptent que STARTTLS
+    }
+    return in_array($v, ['ssl', 'smtps'], true) ? 'ssl' : 'tls';
+}
+
 /** Envoi des e-mails par SMTP (si SMTP_HOST est vide, repli sur mail()). */
 define('SMTP', [
     'host'      => env('SMTP_HOST'),
     'port'      => (int) env('SMTP_PORT', '587'),
     'user'      => env('SMTP_USER'),
     'pass'      => env('SMTP_PASS'),
-    'secure'    => strtolower(env('SMTP_SECURE', 'tls')), // tls (587) | ssl (465) | none
+    'secure'    => smtp_secure(env('SMTP_SECURE', 'tls'), (int) env('SMTP_PORT', '587')), // tls | ssl | none
     'from'      => env('MAIL_FROM', 'no-reply@babsbatsarl-ci.com'),
     'from_name' => env('MAIL_FROM_NAME', "Site BAB'S-BAT"),
 ]);
