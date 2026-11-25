@@ -68,15 +68,18 @@ const NAV = [
 
 /**
  * Vidéos de la page d'accueil (section « Sur le terrain »).
- * 'src' : chemin local (video/…) ou URL complète (ex. MinIO : https://…/video-1.mp4).
+ * Fichiers hébergés sur MinIO (bucket en lecture publique).
  * 'fit' : cover (remplit le cadre) ou contain (vidéo entière, bandes noires).
+ * Dossier modifiable via la variable d'environnement VIDEO_BASE_URL.
  */
-const VIDEOS = [
-    ['src' => 'video/video-1.mp4', 'caption' => 'La latérite, matière première de nos briques',        'fit' => 'cover'],
-    ['src' => 'video/video-2.mp4', 'caption' => 'Des milliers de briques BTCS en séchage',             'fit' => 'contain'],
-    ['src' => 'video/video-3.mp4', 'caption' => 'Livraison de latérite sur le site de production',     'fit' => 'cover'],
-    ['src' => 'video/video-4.mp4', 'caption' => 'Les briques prêtes à partir sur le chantier',         'fit' => 'cover'],
-];
+define('VIDEO_BASE_URL', rtrim(env('VIDEO_BASE_URL', 'https://minio-files.kronyxtech.com/other.bucket/video'), '/'));
+
+define('VIDEOS', [
+    ['src' => VIDEO_BASE_URL . '/video-1.mp4', 'caption' => 'La latérite, matière première de nos briques',        'fit' => 'cover'],
+    ['src' => VIDEO_BASE_URL . '/video-2.mp4', 'caption' => 'Des milliers de briques BTCS en séchage',             'fit' => 'contain'],
+    ['src' => VIDEO_BASE_URL . '/video-3.mp4', 'caption' => 'Livraison de latérite sur le site de production',     'fit' => 'cover'],
+    ['src' => VIDEO_BASE_URL . '/video-4.mp4', 'caption' => 'Les briques prêtes à partir sur le chantier',         'fit' => 'cover'],
+]);
 
 /** Les métiers proposés dans le formulaire de devis. */
 const SERVICES = [

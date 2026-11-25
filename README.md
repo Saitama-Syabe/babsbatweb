@@ -17,7 +17,7 @@ Site PHP sans framework ni build (PHP 8+, Apache).
 | `lib/PHPMailer/` | PHPMailer 6.9.3 (envoi SMTP), embarqué sans Composer |
 | `css/style.css` | Styles (couleurs en variables dans `:root`) |
 | `js/main.js` | Menu mobile, comparateur, filtres et visionneuse de la galerie, bouton haut de page |
-| `img/`, `video/` | Médias |
+| `img/` | Images (les vidéos sont sur MinIO, voir `VIDEO_BASE_URL`) |
 | `storage/demandes.csv` | Copie de chaque demande de devis (non versionné, interdit au web) |
 | `Dockerfile`, `.dockerignore` | Image de production (php:8.3-apache) |
 | `source-maquette/`, `old/` | Maquette d'origine et ancien site : archives, **non publiées** (bloquées + exclues de l'image) |
@@ -66,7 +66,8 @@ et `/storage/demandes.csv` doivent répondre **403** ; `/galerie.html` doit redi
 
 ## Vidéos
 
-Liste dans `includes/config.php` (`VIDEOS`). `src` accepte un chemin local ou une URL (MinIO).
+Hébergées sur MinIO : `https://minio-files.kronyxtech.com/other.bucket/video/video-1.mp4` … `video-4.mp4`.
+Liste et légendes dans `includes/config.php` (`VIDEOS`) ; dossier modifiable via la variable `VIDEO_BASE_URL`.
 Le bucket MinIO doit être en lecture publique (policy `download`) et servir `Content-Type: video/mp4`.
 
 ## Branches
@@ -76,4 +77,3 @@ On travaille sur `dev`, puis on fusionne dans `main` une fois validé (Dokploy d
 ## Reste à compléter
 
 - Noms des clients des témoignages (optionnel, dans `chantiers.php`, tableau `$testimonials`)
-- URLs MinIO des vidéos (puis supprimer le dossier `video/` du dépôt)
