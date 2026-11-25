@@ -29,8 +29,22 @@ Chaque demande est :
 1. envoyée par **SMTP** à `CONTACT_TO` (Reply-To = e-mail du client, pour répondre directement) ;
 2. ajoutée à `storage/demandes.csv` (filet de sécurité si l'envoi échoue).
 
-Anti-spam : jeton CSRF, champ piège, délai minimal, 1 envoi/minute par session.
 Si `SMTP_HOST` est vide, repli sur `mail()` (rarement disponible dans un conteneur).
+
+### Anti-spam (invisible pour les visiteurs)
+
+| Protection | Effet |
+|---|---|
+| Jeton CSRF | Refuse les envois qui ne viennent pas de la page du site |
+| Champ piège + délai minimal (3 s) | Robot détecté → fausse confirmation, rien n'est envoyé |
+| 1 envoi / minute par session | Évite les doubles envois |
+| **Limite par IP** : 5 demandes / heure (`RATE_LIMIT_PER_HOUR`) | Message « réessayez dans une heure ». IP stockées hachées dans `storage/ratelimit.json` |
+| **Filtre de contenu** | Liens : aucun dans nom/lieu, 1 max dans le message (erreur affichée). Mots-clés de spam, cyrillique/chinois, balises HTML → rejet silencieux |
+
+Les demandes rejetées comme spam sont conservées dans `storage/spam.csv` : à consulter de temps en temps
+pour repérer un éventuel faux positif (vrai client bloqué).
+L'IP réelle est lue en dernière position de `X-Forwarded-For` (ajoutée par Traefik), jamais en première
+(falsifiable par le client).
 
 ### Variables d'environnement
 
@@ -44,6 +58,8 @@ Si `SMTP_HOST` est vide, repli sur `mail()` (rarement disponible dans un contene
 | `MAIL_FROM` | `site@babsbatsarl-ci.com` | Expéditeur : **doit être l'adresse de `SMTP_USER`** (sinon rejet / spam) |
 | `MAIL_FROM_NAME` | `Site BAB'S-BAT` | Nom affiché |
 | `CONTACT_TO` | `bas@babsbatsarl-ci.com` | Destinataire des demandes |
+| `RATE_LIMIT_PER_HOUR` | `5` | Demandes max par IP et par heure (facultatif) |
+| `VIDEO_BASE_URL` | `https://…/other.bucket/video` | Dossier des vidéos (facultatif) |
 
 En local, créer `includes/config.local.php` (ignoré par git) :
 

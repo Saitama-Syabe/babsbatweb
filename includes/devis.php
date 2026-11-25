@@ -2,8 +2,9 @@
 /**
  * Traitement du formulaire de devis.
  * - validation côté serveur
- * - anti-spam : jeton CSRF, champ piège (honeypot), délai minimal, limite de fréquence
- * - envoi par mail() + sauvegarde dans storage/demandes.csv (filet de sécurité si le mail échoue)
+ * - anti-spam : jeton CSRF, champ piège (honeypot), délai minimal, 1 envoi/min par session,
+ *   limite par IP (RATE_LIMIT_PER_HOUR, 5 par défaut), filtre de contenu (liens, mots-clés, écritures)
+ * - envoi SMTP + sauvegarde dans storage/demandes.csv (filet de sécurité si le mail échoue)
  *
  * Retourne ['errors' => [...], 'old' => [...]] ; en cas de succès, redirige (POST → GET).
  */
@@ -66,13 +67,35 @@ function devis_handle(): array
         $errors['msg'] = '3000 caractères maximum.';
     }
 
+    // --- Filtre de contenu ---
+    $spamReason = null;
+    if (!$errors) {
+        [$spamMsg, $isSpam] = spam_check($old);
+        if ($spamMsg !== null) {
+            $field = str_contains($spamMsg, 'message') ? 'msg' : (str_contains($spamMsg, 'nom') ? 'nom' : 'global');
+            $errors[$field] = $spamMsg;
+        } elseif ($isSpam) {
+            $spamReason = 'contenu';
+        }
+    }
+
+    // --- Limite par adresse IP ---
+    if (!$errors && !$isBot && $spamReason === null && !rate_limit_ok()) {
+        $errors['global'] = 'Trop de demandes ont été envoyées depuis votre connexion. Merci de réessayer dans une heure, ou appelez-nous directement.';
+    }
+
     if ($errors) {
         $_SESSION['form_time'] = time() - 10; // ne pas pénaliser une 2e tentative
         return ['errors' => $errors, 'old' => $old];
     }
 
-    // Un robot reçoit une fausse confirmation, rien n'est envoyé.
-    if (!$isBot) {
+    // Robot ou spam : fausse confirmation, rien n'est envoyé (le spam est journalisé pour contrôle).
+    if ($isBot) {
+        spam_log($old, ($_POST['site_web'] ?? '') !== '' ? 'champ piège' : 'trop rapide');
+    } elseif ($spamReason !== null) {
+        spam_log($old, $spamReason);
+    } else {
+        rate_limit_ok(true);
         devis_save($old);
         devis_mail($old);
         $_SESSION['last_sent'] = time();
@@ -84,12 +107,122 @@ function devis_handle(): array
     exit;
 }
 
-/** IP du visiteur (derrière le proxy Traefik de Dokploy, l'IP réelle est dans X-Forwarded-For). */
+/**
+ * IP du visiteur.
+ * Derrière le proxy Traefik de Dokploy, REMOTE_ADDR est l'IP (privée) du proxy et l'IP réelle est la
+ * DERNIÈRE de X-Forwarded-For (celle ajoutée par le proxy). Les premières valeurs peuvent être
+ * falsifiées par le client : on ne les utilise jamais.
+ */
 function client_ip(): string
 {
-    $fwd = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '')[0]);
-    $ip  = filter_var($fwd, FILTER_VALIDATE_IP) ? $fwd : ($_SERVER['REMOTE_ADDR'] ?? '');
-    return (string) $ip;
+    $remote = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+    $fromProxy = $remote !== '' && !filter_var($remote, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE);
+    if ($fromProxy && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $parts = array_map('trim', explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']));
+        $last  = end($parts);
+        if (filter_var($last, FILTER_VALIDATE_IP)) {
+            return $last;
+        }
+    }
+    return $remote;
+}
+
+/**
+ * Limite par adresse IP : au plus RATE_LIMIT_PER_HOUR demandes par heure glissante.
+ * Les IP sont stockées hachées (pas d'IP en clair) dans storage/ratelimit.json.
+ * $record = true enregistre une demande ; false ne fait que vérifier.
+ */
+function rate_limit_ok(bool $record = false): bool
+{
+    $max  = max(1, (int) env('RATE_LIMIT_PER_HOUR', '5'));
+    $dir  = dirname(__DIR__) . '/storage';
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0750, true);
+    }
+    $fh = @fopen($dir . '/ratelimit.json', 'c+');
+    if (!$fh) {
+        return true; // en cas de souci disque, on ne bloque pas les vrais clients
+    }
+    flock($fh, LOCK_EX);
+    $data = json_decode(stream_get_contents($fh) ?: '{}', true) ?: [];
+    $now  = time();
+    // Purge des entrées de plus d'une heure
+    foreach ($data as $k => $times) {
+        $data[$k] = array_values(array_filter((array) $times, fn($t) => $t > $now - 3600));
+        if (!$data[$k]) {
+            unset($data[$k]);
+        }
+    }
+    $key = hash('sha256', client_ip() . '|' . __DIR__);
+    $ok  = count($data[$key] ?? []) < $max;
+    if ($ok && $record) {
+        $data[$key][] = $now;
+    }
+    ftruncate($fh, 0);
+    rewind($fh);
+    fwrite($fh, json_encode($data));
+    fflush($fh);
+    flock($fh, LOCK_UN);
+    fclose($fh);
+    return $ok;
+}
+
+/**
+ * Filtre de contenu.
+ * Retourne [message d'erreur affiché ou null, true si c'est manifestement du spam (rejet silencieux)].
+ */
+function spam_check(array $d): array
+{
+    $urlRe = '~(https?://|www\.|\b[a-z0-9-]+\.(com|net|org|info|biz|ru|xyz|top|site|online|shop|io|co)\b)~i';
+    // Les adresses e-mail ne comptent pas comme des liens
+    $count = static fn(string $s): int => preg_match_all($urlRe, preg_replace('/\S+@\S+/', ' ', $s));
+
+    // Liens : aucun dans les champs courts, au plus 1 dans le message (ex. lien Google Maps)
+    if ($count($d['nom']) || $count($d['lieu']) || $count($d['tel'])) {
+        return ['Les liens web ne sont pas acceptés dans ces champs.', false];
+    }
+    if ($count($d['msg']) > 1) {
+        return ['Merci de ne pas mettre plus d\'un lien dans votre message.', false];
+    }
+
+    $all = mb_strtolower($d['nom'] . ' ' . $d['lieu'] . ' ' . $d['msg']);
+
+    // Écritures étrangères au public visé (cyrillique, chinois/japonais/coréen) : typique du spam
+    if (preg_match('/[\p{Cyrillic}\p{Han}\p{Hiragana}\p{Katakana}\p{Hangul}]/u', $all)) {
+        return [null, true];
+    }
+    // Mots-clés de spam courants
+    $words = ['viagra', 'cialis', 'casino', 'porn', 'escort', 'crypto', 'bitcoin', 'forex',
+              'backlink', 'seo service', 'seo services', 'rank your website', 'guest post', 'loan offer',
+              'click here', 'cliquez ici', 'earn money', 'make money', 'work from home', 'telegram',
+              'whatsapp me', 'investment opportunity', 'unsubscribe'];
+    foreach ($words as $w) {
+        if (str_contains($all, $w)) {
+            return [null, true];
+        }
+    }
+    // Balises HTML / BBCode dans un formulaire texte
+    if (preg_match('~<a\s|\[url[=\]]|</?(script|iframe)~i', $d['msg'] . $d['nom'])) {
+        return [null, true];
+    }
+    // Nom invraisemblable (chiffres, ou une seule « suite » sans voyelle)
+    if (preg_match('/\d{3,}/', $d['nom'])) {
+        return ['Indiquez votre nom et prénom.', false];
+    }
+    return [null, false];
+}
+
+/** Conserve les demandes rejetées comme spam (pour repérer d'éventuels faux positifs). */
+function spam_log(array $d, string $reason): void
+{
+    $file = dirname(__DIR__) . '/storage/spam.csv';
+    $fh = @fopen($file, 'ab');
+    if (!$fh) {
+        return;
+    }
+    $safe = static fn(string $v): string => preg_match('/^[=+\-@]/', $v) ? "'" . $v : $v;
+    fputcsv($fh, array_map($safe, [date('Y-m-d H:i:s'), $reason, $d['nom'], $d['tel'], $d['mail'], $d['lieu'], mb_substr($d['msg'], 0, 500)]), ';');
+    fclose($fh);
 }
 
 function devis_save(array $d): void
