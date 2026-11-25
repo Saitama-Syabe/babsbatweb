@@ -100,6 +100,16 @@ const BUDGETS = [
     'Plus de 75 millions FCFA',
 ];
 
+/**
+ * URL propre d'une page (sans .php) : 'metiers.php' → 'metiers', 'index.php' → './'.
+ * Les liens restent relatifs pour fonctionner aussi en sous-dossier (XAMPP).
+ */
+function page_url(string $file): string
+{
+    $slug = basename($file, '.php');
+    return $slug === 'index' ? './' : $slug;
+}
+
 /** Échappement HTML court. */
 function e(?string $s): string
 {

@@ -3,14 +3,15 @@
 Site PHP sans framework ni build (PHP 8+, Apache).
 
 - Local (XAMPP) : http://localhost/personnalProject/babsbatweb/
-- Ou : `php -S 127.0.0.1:8000` à la racine, puis http://127.0.0.1:8000 (sans les règles `.htaccess`)
+- Ou : `php -S 127.0.0.1:8000 router.php` à la racine, puis http://127.0.0.1:8000
 - Production : Docker / Dokploy (voir plus bas)
 
 ## Structure
 
 | Chemin | Rôle |
 |---|---|
-| `index.php`, `metiers.php`, `chantiers.php`, `contact.php` | Les 4 pages |
+| `index.php`, `metiers.php`, `chantiers.php`, `contact.php`, `404.php` | Les pages, servies en URL propres : `/`, `/metiers`, `/chantiers`, `/contact` |
+| `router.php` | Routeur pour `php -S` en développement (inutile sous Apache, exclu de l'image) |
 | `includes/config.php` | **Coordonnées, téléphones, menu, métiers, vidéos** : à modifier ici |
 | `includes/header.php`, `includes/footer.php` | En-tête et pied de page communs |
 | `includes/devis.php` | Traitement du formulaire de devis (SMTP) |
@@ -62,7 +63,17 @@ En local, créer `includes/config.local.php` (ignoré par git) :
 6. **Deploy**. Activer l'auto-deploy pour redéployer à chaque push sur `main`.
 
 Vérifications après mise en ligne : envoyer une demande de devis test ; `/old/`, `/includes/config.php`
-et `/storage/demandes.csv` doivent répondre **403** ; `/galerie.html` doit rediriger vers `/chantiers.php`.
+et `/storage/demandes.csv` doivent répondre **403** ; `/galerie.html` et `/metiers.php` doivent rediriger
+vers `/chantiers` et `/metiers` ; une adresse inconnue doit afficher la page 404 « Brique manquante ».
+
+## URL propres
+
+Les adresses ne montrent jamais le nom du fichier. `.htaccess` réécrit `/metiers` vers `metiers.php`
+(invisible pour le visiteur) et redirige en 301 toute adresse tapée en `.php` ou `.html` vers sa version propre.
+Les liens du site sont relatifs, résolus par la balise `<base>` : ça marche à la racine comme sous XAMPP.
+
+Pour ajouter une page : créer `ma-page.php`, puis ajouter `ma-page` aux règles `(metiers|chantiers|contact)`
+du `.htaccess` et de `router.php`.
 
 ## Vidéos
 

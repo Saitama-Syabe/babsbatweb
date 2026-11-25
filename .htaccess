@@ -1,5 +1,5 @@
 # BAB'S-BAT — configuration Apache
-Options -Indexes
+Options -Indexes -MultiViews
 DirectoryIndex index.php
 AddDefaultCharset UTF-8
 
@@ -10,20 +10,36 @@ AddDefaultCharset UTF-8
   RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
   RewriteRule ^(.*)$ - [E=BASE:%1]
 
-  # Anciennes pages (v1) -> nouvelles pages (redirection permanente)
-  RewriteRule ^galerie\.html$          %{ENV:BASE}chantiers.php [R=301,L,NC]
-  RewriteRule ^nos_services\.html$     %{ENV:BASE}metiers.php   [R=301,L,NC]
-  RewriteRule ^nous_contacter\.html$   %{ENV:BASE}contact.php   [R=301,L,NC]
-  RewriteRule ^qui_sommes_nous\.html$  %{ENV:BASE}index.php#apropos [R=301,L,NC,NE]
-
-  # Pages de la maquette (.html) -> .php
-  RewriteRule ^(index|metiers|chantiers|contact)\.html$ %{ENV:BASE}$1.php [R=301,L,NC]
-
   # Dossiers internes interdits au public
   RewriteRule ^(includes|storage|source-maquette|lib|old)(/|$) - [F,L,NC]
   # Fichiers techniques interdits au public
-  RewriteRule ^(Dockerfile|README\.md|\.git.*|\.docker.*)$ - [F,L,NC]
+  RewriteRule ^(Dockerfile|README\.md|router\.php|\.git.*|\.docker.*)$ - [F,L,NC]
+
+  # Anciennes pages (v1) -> URL propres (redirection permanente)
+  RewriteRule ^galerie\.html$          %{ENV:BASE}chantiers [R=301,L,NC]
+  RewriteRule ^nos_services\.html$     %{ENV:BASE}metiers   [R=301,L,NC]
+  RewriteRule ^nous_contacter\.html$   %{ENV:BASE}contact   [R=301,L,NC]
+  RewriteRule ^qui_sommes_nous\.html$  %{ENV:BASE}#apropos  [R=301,L,NC,NE]
+  RewriteRule ^index\.html$            %{ENV:BASE}          [R=301,L,NC]
+  RewriteRule ^(metiers|chantiers|contact)\.html$ %{ENV:BASE}$1 [R=301,L,NC]
+
+  # Adresse tapée avec .php -> URL propre (le nom du fichier n'apparaît jamais)
+  RewriteCond %{REQUEST_METHOD} ^(GET|HEAD)$
+  RewriteCond %{THE_REQUEST} \s[^?\s]*/index\.php[?\s] [NC]
+  RewriteRule ^index\.php$ %{ENV:BASE} [R=301,L,NC]
+  RewriteCond %{REQUEST_METHOD} ^(GET|HEAD)$
+  RewriteCond %{THE_REQUEST} \s[^?\s]*/(metiers|chantiers|contact)\.php[?\s] [NC]
+  RewriteRule ^(metiers|chantiers|contact)\.php$ %{ENV:BASE}%1 [R=301,L,NC]
+
+  # Barre oblique finale superflue : /metiers/ -> /metiers
+  RewriteRule ^(metiers|chantiers|contact)/$ %{ENV:BASE}$1 [R=301,L,NC]
+
+  # URL propre -> fichier PHP (réécriture interne, invisible pour le visiteur)
+  RewriteRule ^(metiers|chantiers|contact)$ $1.php [L,NC]
 </IfModule>
+
+# Pages d'erreur
+ErrorDocument 404 /404.php
 
 # Cache des fichiers statiques
 <IfModule mod_expires.c>

@@ -16,7 +16,7 @@ function devis_handle(): array
         'nom' => '', 'tel' => '', 'mail' => '', 'lieu' => '',
         'budget' => BUDGETS[0], 'msg' => '',
     ];
-    // Pré-sélection depuis un lien (ex. contact.php?service=villa-songon)
+    // Pré-sélection depuis un lien (ex. contact?service=villa-songon)
     if (isset($_GET['service']) && isset(SERVICES[$_GET['service']])) {
         $old['service'] = $_GET['service'];
     }
@@ -80,7 +80,7 @@ function devis_handle(): array
 
     $_SESSION['devis_ok'] = SERVICES[$old['service']];
     unset($_SESSION['csrf']);
-    header('Location: contact.php?envoye=1#formulaire', true, 303);
+    header('Location: contact?envoye=1#formulaire', true, 303);
     exit;
 }
 

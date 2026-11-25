@@ -11,3 +11,4 @@ storage/*
 !storage/.htaccess
 includes/config.local.php
 *.md
+router.php

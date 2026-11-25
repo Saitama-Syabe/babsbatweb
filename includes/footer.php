@@ -15,7 +15,7 @@ $year   = date('Y');
     <div class="row" style="gap: 24px 48px; align-items: flex-end; justify-content: space-between">
       <p class="dsp footer-big__claim">Bâtissons<br>ensemble.</p>
       <div class="row" style="gap: 10px; padding-bottom: 12px">
-        <a href="contact.php" class="btn btn--orange">Demander un devis</a>
+        <a href="contact" class="btn btn--orange">Demander un devis</a>
         <a href="<?= e(WHATSAPP) ?>" class="btn btn--outline-light" target="_blank" rel="noopener">WhatsApp</a>
       </div>
     </div>
@@ -51,7 +51,7 @@ $year   = date('Y');
 <?php endif; ?>
 </footer>
 
-<a href="#" class="to-top" data-to-top aria-label="Remonter en haut de la page" title="Haut de page">
+<a href="<?= e(page_url($page)) ?>#contenu" class="to-top" data-to-top aria-label="Remonter en haut de la page" title="Haut de page">
   <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M12 5l-7 7m7-7l7 7M12 5v14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square"/></svg>
 </a>
 

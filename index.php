@@ -18,8 +18,8 @@ require __DIR__ . '/includes/header.php';
       <div class="hero__text">
         <p class="lead">Nous fabriquons nos briques à partir de la latérite, puis nous bâtissons des maisons fraîches, silencieuses et durables. Du terrain à la remise des clés.</p>
         <div class="hero__actions">
-          <a href="contact.php" class="btn btn--orange">Demander un devis gratuit</a>
-          <a href="#matiere" class="btn btn--outline-light">Découvrir la BTCS ↓</a>
+          <a href="contact" class="btn btn--orange">Demander un devis gratuit</a>
+          <a href="./#matiere" class="btn btn--outline-light">Découvrir la BTCS ↓</a>
         </div>
       </div>
       <div class="wall">
@@ -149,7 +149,7 @@ require __DIR__ . '/includes/header.php';
           <div><dt class="mono">Murs</dt><dd>BTCS, isolation thermique et phonique</dd></div>
           <div><dt class="mono">Connectée</dt><dd>Vidéosurveillance et domotique intégrées</dd></div>
         </dl>
-        <a href="contact.php?service=villa-songon" class="btn btn--orange" style="align-self: flex-start">Réserver une villa →</a>
+        <a href="contact?service=villa-songon" class="btn btn--orange" style="align-self: flex-start">Réserver une villa →</a>
       </div>
     </div>
   </div>
@@ -163,24 +163,24 @@ require __DIR__ . '/includes/header.php';
         <span class="mono eyebrow sw-green">Rang 03 — Nos métiers</span>
         <h2 class="dsp h-section">Sept briques,<br>un seul mur</h2>
       </div>
-      <a href="metiers.php" class="mono" style="padding: 14px 0">Voir le détail des métiers →</a>
+      <a href="metiers" class="mono" style="padding: 14px 0">Voir le détail des métiers →</a>
     </div>
     <div class="bricks">
       <div class="bricks__row">
-        <a href="metiers.php#construction" class="brick-card brick-card--brick"><span class="mono">01</span><span class="brick-card__body"><span class="dsp brick-card__title">Construction</span><span class="brick-card__desc">Villas, duplex, immeubles et locaux en BTCS.</span></span></a>
-        <a href="metiers.php#lotissement" class="brick-card"><span class="mono">02</span><span class="brick-card__body"><span class="dsp brick-card__title">Lotissement</span><span class="brick-card__desc">Terrains viabilisés, dossier foncier vérifié.</span></span></a>
-        <a href="metiers.php#location" class="brick-card brick-card--clay"><span class="mono">03</span><span class="brick-card__body"><span class="dsp brick-card__title">Location-vente</span><span class="brick-card__desc">Devenez propriétaire au fil de vos mensualités.</span></span></a>
+        <a href="metiers#construction" class="brick-card brick-card--brick"><span class="mono">01</span><span class="brick-card__body"><span class="dsp brick-card__title">Construction</span><span class="brick-card__desc">Villas, duplex, immeubles et locaux en BTCS.</span></span></a>
+        <a href="metiers#lotissement" class="brick-card"><span class="mono">02</span><span class="brick-card__body"><span class="dsp brick-card__title">Lotissement</span><span class="brick-card__desc">Terrains viabilisés, dossier foncier vérifié.</span></span></a>
+        <a href="metiers#location" class="brick-card brick-card--clay"><span class="mono">03</span><span class="brick-card__body"><span class="dsp brick-card__title">Location-vente</span><span class="brick-card__desc">Devenez propriétaire au fil de vos mensualités.</span></span></a>
       </div>
       <div class="bricks__row">
         <div class="brick-half" aria-hidden="true" style="background: var(--green)"></div>
-        <a href="metiers.php#gestion" class="brick-card"><span class="mono">04</span><span class="brick-card__body"><span class="dsp brick-card__title">Gestion immobilière</span><span class="brick-card__desc">Locataires, loyers, entretien : on gère pour vous.</span></span></a>
-        <a href="metiers.php#securite" class="brick-card brick-card--ink"><span class="mono">05</span><span class="brick-card__body"><span class="dsp brick-card__title">Vidéo&shy;surveillance &amp; accès</span><span class="brick-card__desc">Caméras, badges et domotique, entreprises et domiciles.</span></span></a>
+        <a href="metiers#gestion" class="brick-card"><span class="mono">04</span><span class="brick-card__body"><span class="dsp brick-card__title">Gestion immobilière</span><span class="brick-card__desc">Locataires, loyers, entretien : on gère pour vous.</span></span></a>
+        <a href="metiers#securite" class="brick-card brick-card--ink"><span class="mono">05</span><span class="brick-card__body"><span class="dsp brick-card__title">Vidéo&shy;surveillance &amp; accès</span><span class="brick-card__desc">Caméras, badges et domotique, entreprises et domiciles.</span></span></a>
         <div class="brick-half" aria-hidden="true" style="background: var(--brick)"></div>
       </div>
       <div class="bricks__row">
-        <a href="metiers.php#solaire" class="brick-card brick-card--clay"><span class="mono">06</span><span class="brick-card__body"><span class="dsp brick-card__title">Équipement solaire</span><span class="brick-card__desc">Vente et installation de panneaux et kits.</span></span></a>
-        <a href="metiers.php#prestations" class="brick-card"><span class="mono">07</span><span class="brick-card__body"><span class="dsp brick-card__title">Prestations de services</span><span class="brick-card__desc">Rénovation, études et travaux sur mesure.</span></span></a>
-        <a href="contact.php" class="brick-card brick-card--orange"><span class="mono">Votre projet</span><span class="dsp brick-card__title">Posons la première brique →</span></a>
+        <a href="metiers#solaire" class="brick-card brick-card--clay"><span class="mono">06</span><span class="brick-card__body"><span class="dsp brick-card__title">Équipement solaire</span><span class="brick-card__desc">Vente et installation de panneaux et kits.</span></span></a>
+        <a href="metiers#prestations" class="brick-card"><span class="mono">07</span><span class="brick-card__body"><span class="dsp brick-card__title">Prestations de services</span><span class="brick-card__desc">Rénovation, études et travaux sur mesure.</span></span></a>
+        <a href="contact" class="brick-card brick-card--orange"><span class="mono">Votre projet</span><span class="dsp brick-card__title">Posons la première brique →</span></a>
       </div>
     </div>
   </div>

@@ -94,7 +94,7 @@ if ($testimonials): ?>
 <section class="t-orange">
   <div class="wrap cta-band__inner">
     <h2 class="dsp h-cta">Le prochain mur, c'est le vôtre</h2>
-    <a href="contact.php" class="btn btn--dark">Démarrer mon projet →</a>
+    <a href="contact" class="btn btn--dark">Démarrer mon projet →</a>
   </div>
 </section>
 

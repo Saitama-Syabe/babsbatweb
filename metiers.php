@@ -31,7 +31,7 @@ require __DIR__ . '/includes/header.php';
       <h2 class="dsp trade__title">Lotissement</h2>
       <div class="trade__body">
         <p>Des terrains viabilisés dans des zones en plein essor, avec un dossier foncier vérifié pour acheter en toute sérénité.</p>
-        <span class="mono trade__tags">Surfaces et prix : <a href="contact.php?service=lotissement">sur demande de devis →</a></span>
+        <span class="mono trade__tags">Surfaces et prix : <a href="contact?service=lotissement">sur demande de devis →</a></span>
       </div>
       <div class="trade__visual plots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
     </article>
@@ -41,7 +41,7 @@ require __DIR__ . '/includes/header.php';
       <h2 class="dsp trade__title">Location-vente</h2>
       <div class="trade__body">
         <p>Habitez dès maintenant et devenez propriétaire au fil de vos mensualités. Un contrat clair, un échéancier adapté à vos revenus.</p>
-        <span class="mono trade__tags">Apport et durée : <a href="contact.php?service=location">sur demande de devis →</a></span>
+        <span class="mono trade__tags">Apport et durée : <a href="contact?service=location">sur demande de devis →</a></span>
       </div>
       <img class="trade__visual" src="img/render-garages.jpg" alt="Villas avec garages doubles" loading="lazy">
     </article>
@@ -91,7 +91,7 @@ require __DIR__ . '/includes/header.php';
 <section class="t-orange">
   <div class="wrap cta-band__inner">
     <h2 class="dsp h-cta">Posons la première brique</h2>
-    <a href="contact.php" class="btn btn--dark">Demander un devis gratuit →</a>
+    <a href="contact" class="btn btn--dark">Demander un devis gratuit →</a>
   </div>
 </section>
 

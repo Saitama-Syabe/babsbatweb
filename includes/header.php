@@ -11,13 +11,19 @@ require_once __DIR__ . '/config.php';
 $page        = $page ?? 'index.php';
 $title       = $title ?? SITE['name'];
 $description = $description ?? SITE['slogan'];
-$canonical   = SITE['url'] . '/' . ($page === 'index.php' ? '' : $page);
+$canonical   = SITE['url'] . '/' . ltrim(page_url($page), './');
+$noindex     = $noindex ?? false;
+// Dossier racine du site ('/' en production) : sert de base à tous les liens relatifs
+$base        = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/') . '/';
+$self        = page_url($page); // ancres internes (#…) : à préfixer par la page courante
 ?>
 <!doctype html>
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<base href="<?= e($base) ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<?php if ($noindex): ?><meta name="robots" content="noindex"><?php endif; ?>
 <title><?= e($title) ?></title>
 <meta name="description" content="<?= e($description) ?>">
 <link rel="canonical" href="<?= e($canonical) ?>">
@@ -37,11 +43,11 @@ $canonical   = SITE['url'] . '/' . ($page === 'index.php' ? '' : $page);
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
-<a class="skip-link" href="#contenu">Aller au contenu</a>
+<a class="skip-link" href="<?= e($self) ?>#contenu">Aller au contenu</a>
 
 <header class="site-header" data-header>
   <div class="wrap site-header__inner">
-    <a href="index.php" class="brand" aria-label="<?= e(SITE['legal']) ?> — accueil">
+    <a href="./" class="brand" aria-label="<?= e(SITE['legal']) ?> — accueil">
       <?php include __DIR__ . '/logo.svg.php'; ?>
       <span class="brand__text">
         <span class="dsp brand__name">BAB'S-BAT <small>SARL</small></span>
@@ -54,9 +60,9 @@ $canonical   = SITE['url'] . '/' . ($page === 'index.php' ? '' : $page);
     </button>
     <nav id="menu-principal" aria-label="Navigation principale" class="mono nav">
       <?php foreach (NAV as $file => $label): ?>
-        <a href="<?= $file ?>"<?= $file === $page ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>
+        <a href="<?= page_url($file) ?>"<?= $file === $page ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>
       <?php endforeach; ?>
-      <a href="contact.php" class="nav__cta"<?= $page === 'contact.php' ? ' aria-current="page"' : '' ?>>Devis gratuit →</a>
+      <a href="contact" class="nav__cta"<?= $page === 'contact.php' ? ' aria-current="page"' : '' ?>>Devis gratuit →</a>
     </nav>
   </div>
 </header>

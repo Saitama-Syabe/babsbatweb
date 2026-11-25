@@ -45,7 +45,7 @@ require __DIR__ . '/includes/header.php';
           <span class="mono">Demande reçue</span>
           <h2 class="dsp">La première brique est posée</h2>
           <p>Merci ! Un conseiller BAB'S-BAT vous rappelle sous 48 à 72 h pour préciser votre projet (<?= e(mb_strtolower($sentService)) ?>).</p>
-          <a href="contact.php" class="btn btn--outline-light">Envoyer une autre demande</a>
+          <a href="contact" class="btn btn--outline-light">Envoyer une autre demande</a>
         </div>
       <?php else: ?>
         <?php if ($errors): ?>
@@ -54,7 +54,7 @@ require __DIR__ . '/includes/header.php';
           </div>
         <?php endif; ?>
 
-        <form class="form" method="post" action="contact.php#formulaire" novalidate>
+        <form class="form" method="post" action="contact#formulaire" novalidate>
           <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
           <div class="hp" aria-hidden="true">
             <label for="site_web">Ne pas remplir</label>
