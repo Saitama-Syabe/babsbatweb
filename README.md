@@ -22,6 +22,7 @@ Site PHP sans framework ni build (PHP 8+, Apache).
 | `storage/demandes.csv` | Copie de chaque demande de devis (non versionné, interdit au web) |
 | `Dockerfile`, `.dockerignore` | Image de production (php:8.3-apache) |
 | `source-maquette/`, `old/` | Maquette d'origine et ancien site : archives, **non publiées** (bloquées + exclues de l'image) |
+| `SUIVI.md` | **Suivi du projet** : tâches restantes (SEO, performance, contenu), décisions en attente, historique |
 
 ## Formulaire de devis
 

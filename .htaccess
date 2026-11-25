@@ -18,7 +18,7 @@ AddDefaultCharset UTF-8
   # Dossiers internes interdits au public
   RewriteRule ^(includes|storage|source-maquette|lib|old|bin)(/|$) - [F,L,NC]
   # Fichiers techniques interdits au public
-  RewriteRule ^(Dockerfile|README\.md|router\.php|\.git.*|\.docker.*)$ - [F,L,NC]
+  RewriteRule ^(Dockerfile|[^/]+\.md|router\.php|\.git.*|\.docker.*)$ - [F,L,NC]
 
   # Anciennes pages (v1) -> URL propres (redirection permanente)
   RewriteRule ^galerie\.html$          %{ENV:ORIGIN}%{ENV:BASE}chantiers [R=301,L,NC]
