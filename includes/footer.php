@@ -51,6 +51,6 @@ $year   = date('Y');
 <?php endif; ?>
 </footer>
 
-<script src="js/main.js?v=1" defer></script>
+<script src="js/main.js?v=2" defer></script>
 </body>
 </html>

@@ -38,12 +38,30 @@ $count = count($projects);
   <div class="wrap gallery" data-gallery>
     <?php foreach ($projects as [$cat, $label, $img, $grow]): ?>
       <figure data-cat="<?= e($cat) ?>" style="--grow: <?= $grow ?>">
-        <img src="<?= e($img) ?>" alt="<?= e($label) ?>" loading="lazy">
+        <a href="<?= e($img) ?>" class="gallery__link" data-lightbox data-caption="<?= e($cat) ?> · Songon — <?= e($label) ?>" aria-label="Agrandir la photo : <?= e($label) ?>">
+          <img src="<?= e($img) ?>" alt="<?= e($label) ?>" loading="lazy">
+        </a>
         <figcaption><span class="mono"><?= e($cat) ?> · Songon</span><span><?= e($label) ?></span></figcaption>
       </figure>
     <?php endforeach; ?>
   </div>
 </section>
+
+<!-- Visionneuse photo -->
+<dialog class="lightbox" data-lightbox-dialog aria-label="Visionneuse de photos">
+  <div class="lightbox__bar">
+    <span class="mono" data-lb-count></span>
+    <button type="button" class="lightbox__btn lightbox__close" data-lb-close aria-label="Fermer">✕</button>
+  </div>
+  <div class="lightbox__stage">
+    <button type="button" class="lightbox__btn lightbox__nav lightbox__nav--prev" data-lb-prev aria-label="Photo précédente">←</button>
+    <figure class="lightbox__figure">
+      <img data-lb-img alt="">
+      <figcaption class="lightbox__caption" data-lb-caption></figcaption>
+    </figure>
+    <button type="button" class="lightbox__btn lightbox__nav lightbox__nav--next" data-lb-next aria-label="Photo suivante">→</button>
+  </div>
+</dialog>
 
 <section>
   <div class="wrap testimonial">
