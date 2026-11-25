@@ -150,6 +150,7 @@ p { margin: 0; }
 .nav a[aria-current="page"] { background: var(--ink); color: var(--paper); }
 .nav a.nav__cta { background: var(--orange); color: var(--ink); }
 .nav a.nav__cta:hover { background: var(--orange-light); }
+.nav a.nav__cta[aria-current="page"] { background: var(--ink); color: var(--orange); }
 
 /* ---------- Pied de page ---------- */
 .site-footer { background: var(--ink); color: var(--paper); }

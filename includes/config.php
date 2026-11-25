@@ -34,7 +34,6 @@ const NAV = [
     'index.php'     => 'Accueil',
     'metiers.php'   => 'Métiers',
     'chantiers.php' => 'Chantiers',
-    'contact.php'   => 'Contact',
 ];
 
 /** Les métiers proposés dans le formulaire de devis. */

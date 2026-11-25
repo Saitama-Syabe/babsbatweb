@@ -33,7 +33,7 @@ $canonical   = SITE['url'] . '/' . ($page === 'index.php' ? '' : $page);
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=8">
+<link rel="stylesheet" href="css/style.css?v=9">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -56,7 +56,7 @@ $canonical   = SITE['url'] . '/' . ($page === 'index.php' ? '' : $page);
       <?php foreach (NAV as $file => $label): ?>
         <a href="<?= $file ?>"<?= $file === $page ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>
       <?php endforeach; ?>
-      <a href="contact.php" class="nav__cta">Devis gratuit →</a>
+      <a href="contact.php" class="nav__cta"<?= $page === 'contact.php' ? ' aria-current="page"' : '' ?>>Devis gratuit →</a>
     </nav>
   </div>
 </header>
