@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>BAB'S-BAT — Chantiers</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#00742A}a:hover{color:#004D1B}
+.dsp{font-family:Anton,'Arial Narrow',sans-serif;font-weight:400;text-transform:uppercase;line-height:.95;margin:0;letter-spacing:.5px}
+.mono{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.wrap{max-width:1320px;margin:0 auto;padding-left:24px;padding-right:24px}
+</style>
+</helmet>
+<div style="font-family: Barlow, system-ui, sans-serif; color: #16110D; background: #F3EDE4; min-width: 0; overflow: hidden">
+
+<!-- En-tête -->
+<header style="background: #F3EDE4; border-bottom: 2px solid #16110D">
+  <div class="wrap" style="padding-top: 14px; padding-bottom: 14px; display: flex; flex-wrap: wrap; gap: 12px 32px; align-items: center; justify-content: space-between">
+    <a href="Main.dc.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #16110D">
+      <svg viewBox="60 80 810 700" width="58" height="50" aria-hidden="true"><polygon points="70,708 600,88 855,375 800,435 623,222 137,772" fill="#009A33"></polygon><rect x="483" y="340" width="244" height="253" fill="#C77B4E"></rect><g stroke="#8A4A2A" stroke-width="9"><line x1="483" y1="403" x2="727" y2="403"></line><line x1="483" y1="466" x2="727" y2="466"></line><line x1="483" y1="529" x2="727" y2="529"></line><line x1="575" y1="340" x2="575" y2="403"></line><line x1="690" y1="340" x2="690" y2="403"></line><line x1="530" y1="403" x2="530" y2="466"></line><line x1="640" y1="403" x2="640" y2="466"></line><line x1="575" y1="466" x2="575" y2="529"></line><line x1="690" y1="466" x2="690" y2="529"></line><line x1="530" y1="529" x2="530" y2="593"></line><line x1="640" y1="529" x2="640" y2="593"></line></g></svg>
+      <span style="display: flex; flex-direction: column; gap: 4px">
+        <span class="dsp" style="font-size: 26px">BAB'S-BAT <span style="font-size: 15px">SARL</span></span>
+        <span class="mono" style="font-size: 13px; text-transform: none; letter-spacing: .2px">Bâtissons ensemble les maisons de demain</span>
+      </span>
+    </a>
+    <nav aria-label="Navigation principale" class="mono" style="display: flex; flex-wrap: wrap; gap: 6px; font-weight: 600">
+      <a href="Main.dc.html" style="padding: 13px 16px; color: #16110D; border: 2px solid #16110D; text-decoration: none">Accueil</a>
+      <a href="Services.dc.html" style="padding: 13px 16px; color: #16110D; border: 2px solid #16110D; text-decoration: none">Métiers</a>
+      <a href="Realisations.dc.html" style="padding: 13px 16px; background: #16110D; color: #F3EDE4; border: 2px solid #16110D; text-decoration: none">Chantiers</a>
+      <a href="Contact.dc.html" style="padding: 13px 16px; color: #16110D; border: 2px solid #16110D; text-decoration: none">Contact</a>
+      <a href="Contact.dc.html" style="padding: 13px 16px; background: #F39200; color: #16110D; border: 2px solid #16110D; text-decoration: none">Devis gratuit →</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Titre + filtres -->
+<section style="background: #16110D; color: #F3EDE4">
+  <div class="wrap" style="padding-top: 56px; padding-bottom: 56px; display: flex; flex-direction: column; gap: 28px">
+    <span class="mono">Chantiers · Cité de Songon, Institut Pasteur</span>
+    <h1 class="dsp" style="font-size: clamp(64px, 12.6vw, 196px); line-height: .88">Brique<br>après brique<span style="color: #F39200">.</span></h1>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px 48px; align-items: flex-end; justify-content: space-between">
+      <div role="group" aria-label="Filtrer les photos" style="display: flex; flex-wrap: wrap; gap: 6px">
+        <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+          <button type="button" onClick="{{ f.pick }}" aria-pressed="{{ f.pressed }}" style="{{ f.style }}">{{ f.label }}</button>
+        </sc-for>
+      </div>
+      <span class="mono">{{ countLabel }}</span>
+    </div>
+  </div>
+</section>
+
+<!-- Mur de photos -->
+<section style="background: #16110D">
+  <div class="wrap" style="padding-bottom: 104px; display: flex; flex-wrap: wrap; gap: 8px">
+    <sc-for list="{{ shown }}" as="p" hint-placeholder-count="9">
+      <figure style="{{ p.style }}">
+        <img src="{{ p.img }}" alt="{{ p.title }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block">
+        <figcaption style="position: absolute; left: 0; bottom: 0; max-width: 88%; background: #F3EDE4; color: #16110D; padding: 12px 16px; display: flex; flex-direction: column; gap: 4px">
+          <span class="mono" style="font-size: 14px; color: #9A3A15">{{ p.tag }}</span>
+          <span style="font-size: 17px; font-weight: 600; line-height: 1.25">{{ p.title }}</span>
+        </figcaption>
+      </figure>
+    </sc-for>
+  </div>
+</section>
+
+<!-- Témoignage -->
+<section>
+  <div class="wrap" style="padding-top: 96px; padding-bottom: 96px; display: flex; flex-wrap: wrap; gap: 32px 64px; align-items: flex-start">
+    <span class="mono" style="flex: 0 1 220px; display: flex; align-items: center; gap: 10px"><span aria-hidden="true" style="width: 22px; height: 11px; background: #B5451B"></span>Parole de client</span>
+    <blockquote style="margin: 0; flex: 1 1 560px; display: flex; flex-direction: column; gap: 20px">
+      <p class="dsp" style="font-size: clamp(32px, 4vw, 56px); line-height: 1.05">« [Témoignage client à compléter.] »</p>
+      <footer class="mono">[Nom du client] — [Projet, quartier]</footer>
+    </blockquote>
+  </div>
+</section>
+
+<!-- Appel -->
+<section style="background: #F39200">
+  <div class="wrap" style="padding-top: 64px; padding-bottom: 64px; display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: center; justify-content: space-between">
+    <h2 class="dsp" style="font-size: clamp(40px, 5.4vw, 80px); flex: 1 1 520px">Le prochain mur, c'est le vôtre</h2>
+    <a href="Contact.dc.html" style="padding: 17px 26px; background: #16110D; color: #F3EDE4; text-decoration: none; font-weight: 700; font-size: 17px">Démarrer mon projet →</a>
+  </div>
+</section>
+
+<footer style="background: #16110D; color: #F3EDE4">
+  <div class="wrap" style="padding-top: 48px; padding-bottom: 32px; display: flex; flex-wrap: wrap; gap: 20px 48px; align-items: center; justify-content: space-between">
+    <span class="dsp" style="font-size: 40px; color: #F39200">Bâtissons ensemble.</span>
+    <span class="mono" style="text-transform: none">(+225) 07 88 37 37 37 · <a href="mailto:bas@babsbatsarl-ci.com" style="color: #F7B44A">bas@babsbatsarl-ci.com</a></span>
+    <span class="mono" style="color: #A8998C; font-size: 12px">© 2026 BAB'S-BAT SARL</span>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2700}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { cat: 'Tout' };
+  }
+  renderVals() {
+    const projects = [
+      { cat: 'Plans 3D', title: 'Villas 6 pièces, façade carports', img: '/_blob/86f12d86d95cf3a5a8c11f5d9fe6999c' },
+      { cat: 'Chantier', title: 'Gros œuvre et portails posés', img: '/_blob/d4904daf69e2a83623e6d051a19d50f0' },
+      { cat: 'Fabrication', title: 'Briques BTCS en cure', img: '/_blob/c6fb5f9835f29ac75ec97226a06be750' },
+      { cat: 'Chantier', title: 'Élévation des murs en BTCS', img: '/_blob/3e3875f02926f78677e59699b5370822' },
+      { cat: 'Plans 3D', title: 'Villas avec garages doubles', img: '/_blob/0b99513f28087bbb4c0e60fe3da53577' },
+      { cat: 'Fabrication', title: 'Tamisage de la latérite', img: '/_blob/3ad89132302f0037e0c8f555dcfc5656' },
+      { cat: 'Plans 3D', title: 'Façade arrière, escaliers hélicoïdaux', img: '/_blob/692303ebd7cfd40280929f97acf7bc3d' },
+      { cat: 'Chantier', title: 'Terrasses et garde-corps', img: '/_blob/1c21af4e4ae0e10b03e504589b85e988' },
+      { cat: 'Plans 3D', title: 'Terrasses végétalisées', img: '/_blob/5a478f65d9ece061ffb9669fd53e36ae' }
+    ];
+    const cats = ['Tout', 'Chantier', 'Plans 3D', 'Fabrication'];
+    const cur = this.state.cat;
+    const base = 'min-height: 46px; padding: 12px 18px; font: 600 16px "Barlow Condensed", sans-serif; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border: 2px solid #F3EDE4;';
+    const filters = cats.map((c) => ({
+      label: c,
+      pressed: c === cur ? 'true' : 'false',
+      style: c === cur ? base + ' background: #F39200; color: #16110D; border-color: #F39200;' : base + ' background: transparent; color: #F3EDE4;',
+      pick: () => this.setState({ cat: c })
+    }));
+    const grow = [3, 2, 2, 2, 3, 2, 2, 3, 2];
+    const list = cur === 'Tout' ? projects : projects.filter((p) => p.cat === cur);
+    const shown = list.map((p, i) => ({
+      ...p,
+      tag: p.cat + ' · Songon',
+      style: 'margin: 0; position: relative; overflow: hidden; height: 320px; min-width: 0; flex: ' + grow[i % grow.length] + ' 1 300px; background: #2A211B'
+    }));
+    const n = shown.length;
+    return { filters, shown, countLabel: (n < 10 ? '0' : '') + n + (n > 1 ? ' photos' : ' photo') };
+  }
+}
+</script>
+</body>
+</html>

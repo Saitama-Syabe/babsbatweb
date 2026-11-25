@@ -1,0 +1,27 @@
+MAQUETTE DU SITE VITRINE — BAB'S-BAT SARL
+==========================================
+
+Pour voir la maquette : double-cliquez sur index.html.
+Elle s'ouvre dans votre navigateur, sans installation.
+
+Contenu du dossier
+------------------
+index.html      Accueil
+metiers.html    Les 7 métiers
+chantiers.html  Galerie de photos avec filtres
+contact.html    Formulaire de devis et coordonnées
+img/            Les 11 photos utilisées
+video/          Les 4 vidéos de chantier
+source-maquette/  Fichiers d'origine de la maquette (format de l'éditeur
+                  Design de Claude ; ils ne s'ouvrent pas seuls dans un navigateur)
+
+À savoir
+--------
+- Une connexion Internet est nécessaire pour charger les polices
+  (Anton et Barlow, Google Fonts). Sans connexion, le texte s'affiche
+  avec une police de remplacement.
+- C'est une maquette : le formulaire de contact affiche un message de
+  confirmation mais n'envoie rien.
+- Les éléments entre crochets [ ... ] sont à compléter : chiffres clés,
+  mot du gérant, témoignage client, légendes des vidéos, prix des lots,
+  conditions de location-vente, délai de rappel.

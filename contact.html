@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BAB'S-BAT — Contact et devis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#00742A}a:hover{color:#004D1B}
+.dsp{font-family:Anton,'Arial Narrow',sans-serif;font-weight:400;text-transform:uppercase;line-height:.95;margin:0;letter-spacing:.5px}
+.mono{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.wrap{max-width:1320px;margin:0 auto;padding-left:24px;padding-right:24px}
+</style>
+</head>
+<body>
+<div style="font-family: Barlow, system-ui, sans-serif; color: #16110D; background: #F3EDE4; min-width: 0; overflow: hidden">
+
+<!-- En-tête -->
+<header style="background: #F3EDE4; border-bottom: 2px solid #16110D">
+  <div class="wrap" style="padding-top: 14px; padding-bottom: 14px; display: flex; flex-wrap: wrap; gap: 12px 32px; align-items: center; justify-content: space-between">
+    <a href="index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #16110D">
+      <svg viewBox="60 80 810 700" width="58" height="50" aria-hidden="true"><polygon points="70,708 600,88 855,375 800,435 623,222 137,772" fill="#009A33"></polygon><rect x="483" y="340" width="244" height="253" fill="#C77B4E"></rect><g stroke="#8A4A2A" stroke-width="9"><line x1="483" y1="403" x2="727" y2="403"></line><line x1="483" y1="466" x2="727" y2="466"></line><line x1="483" y1="529" x2="727" y2="529"></line><line x1="575" y1="340" x2="575" y2="403"></line><line x1="690" y1="340" x2="690" y2="403"></line><line x1="530" y1="403" x2="530" y2="466"></line><line x1="640" y1="403" x2="640" y2="466"></line><line x1="575" y1="466" x2="575" y2="529"></line><line x1="690" y1="466" x2="690" y2="529"></line><line x1="530" y1="529" x2="530" y2="593"></line><line x1="640" y1="529" x2="640" y2="593"></line></g></svg>
+      <span style="display: flex; flex-direction: column; gap: 4px">
+        <span class="dsp" style="font-size: 26px">BAB'S-BAT <span style="font-size: 15px">SARL</span></span>
+        <span class="mono" style="font-size: 13px; text-transform: none; letter-spacing: .2px">Bâtissons ensemble les maisons de demain</span>
+      </span>
+    </a>
+    <nav aria-label="Navigation principale" class="mono" style="display: flex; flex-wrap: wrap; gap: 6px; font-weight: 600">
+      <a href="index.html" style="padding: 13px 16px; color: #16110D; border: 2px solid #16110D; text-decoration: none">Accueil</a>
+      <a href="metiers.html" style="padding: 13px 16px; color: #16110D; border: 2px solid #16110D; text-decoration: none">Métiers</a>
+      <a href="chantiers.html" style="padding: 13px 16px; color: #16110D; border: 2px solid #16110D; text-decoration: none">Chantiers</a>
+      <a href="contact.html" style="padding: 13px 16px; background: #16110D; color: #F3EDE4; border: 2px solid #16110D; text-decoration: none">Contact</a>
+      <a href="contact.html" style="padding: 13px 16px; background: #F39200; color: #16110D; border: 2px solid #16110D; text-decoration: none">Devis gratuit →</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Titre -->
+<section style="background: #B5451B; color: #F3EDE4">
+  <div class="wrap" style="padding-top: 56px; padding-bottom: 64px; display: flex; flex-direction: column; gap: 28px">
+    <span class="mono">Contact · Devis gratuit et sans engagement</span>
+    <h1 class="dsp" style="font-size: clamp(64px, 12.6vw, 196px); line-height: .88">Posons la<br>première brique<span style="color: #16110D">.</span></h1>
+  </div>
+</section>
+
+<section>
+  <div class="wrap" style="padding-top: 72px; padding-bottom: 104px; display: flex; flex-wrap: wrap; gap: 48px 64px; align-items: flex-start">
+
+    <!-- Formulaire -->
+    <div style="flex: 3 1 560px; min-width: 0">
+      
+        <form id="devis" style="display: flex; flex-direction: column; gap: 32px">
+          <fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 14px">
+            <legend class="mono" style="padding: 0; margin-bottom: 14px">01 — Choisissez votre brique</legend>
+            <div id="services" style="display: flex; flex-wrap: wrap; gap: 6px">
+              
+            </div>
+          </fieldset>
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <span class="mono">02 — Vos coordonnées</span>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px 8px">
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <label for="nom" style="font-weight: 600; font-size: 16px">Nom et prénom</label>
+                <input id="nom" type="text" autocomplete="name" placeholder="Ex. Kouassi Aya" style="height: 54px; box-sizing: border-box; padding: 0 16px; border: 2px solid #16110D; border-radius: 0; background: #FBF8F3; font: 17px Barlow, sans-serif">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <label for="tel" style="font-weight: 600; font-size: 16px">Téléphone</label>
+                <input id="tel" type="tel" autocomplete="tel" placeholder="+225 07 00 00 00 00" style="height: 54px; box-sizing: border-box; padding: 0 16px; border: 2px solid #16110D; border-radius: 0; background: #FBF8F3; font: 17px Barlow, sans-serif">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <label for="mail" style="font-weight: 600; font-size: 16px">E-mail</label>
+                <input id="mail" type="email" autocomplete="email" placeholder="vous@exemple.com" style="height: 54px; box-sizing: border-box; padding: 0 16px; border: 2px solid #16110D; border-radius: 0; background: #FBF8F3; font: 17px Barlow, sans-serif">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <label for="lieu" style="font-weight: 600; font-size: 16px">Lieu du projet</label>
+                <input id="lieu" type="text" placeholder="Commune, quartier" style="height: 54px; box-sizing: border-box; padding: 0 16px; border: 2px solid #16110D; border-radius: 0; background: #FBF8F3; font: 17px Barlow, sans-serif">
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <span class="mono">03 — Votre projet</span>
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <label for="budget" style="font-weight: 600; font-size: 16px">Budget envisagé</label>
+              <select id="budget" style="height: 54px; box-sizing: border-box; padding: 0 12px; border: 2px solid #16110D; border-radius: 0; background: #FBF8F3; font: 17px Barlow, sans-serif">
+                <option>Je ne sais pas encore</option>
+                <option>Moins de 30 millions FCFA</option>
+                <option>30 à 75 millions FCFA</option>
+                <option>Plus de 75 millions FCFA</option>
+              </select>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <label for="msg" style="font-weight: 600; font-size: 16px">Votre message</label>
+              <textarea id="msg" rows="5" placeholder="Type de bien, surface, délais…" style="box-sizing: border-box; padding: 14px 16px; border: 2px solid #16110D; border-radius: 0; background: #FBF8F3; font: 17px/1.5 Barlow, sans-serif; resize: vertical"></textarea>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: center; justify-content: space-between">
+            <span style="font-size: 15px; color: #5A4C42">Vos données ne servent qu'à traiter votre demande.</span>
+            <button type="submit" style="min-height: 58px; padding: 0 30px; background: #F39200; color: #16110D; border: 2px solid #16110D; border-radius: 0; font: 700 18px Barlow, sans-serif; cursor: pointer">Envoyer ma demande →</button>
+          </div>
+        </form>
+      <div id="merci" style="display: none; flex-direction: column; gap: 24px; align-items: flex-start; padding: 32px; background: #00742A; color: #FFFFFF">
+          <span class="mono">Demande reçue</span>
+          <h2 class="dsp" style="font-size: clamp(44px, 6vw, 88px)">La première brique est posée</h2>
+          <p style="margin: 0; font-size: 19px; line-height: 1.55">Un conseiller BAB'S-BAT vous rappelle sous [48 h] pour préciser votre projet (<span id="chosen"></span>).</p>
+          <button type="button" id="again" style="min-height: 50px; padding: 0 22px; background: transparent; color: #FFFFFF; border: 2px solid #FFFFFF; border-radius: 0; font: 700 16px Barlow, sans-serif; cursor: pointer">Envoyer une autre demande</button>
+        </div>
+      
+    </div>
+
+    <!-- Coordonnées -->
+    <aside style="flex: 2 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+      <div style="background: #16110D; color: #F3EDE4; padding: 28px; display: flex; flex-direction: column; gap: 10px">
+        <span class="mono" style="color: #CDBFB2">Téléphone</span>
+        <a href="tel:+2250788373737" class="dsp" style="font-size: 38px; color: #F39200; text-decoration: none">07 88 37 37 37</a>
+        <a href="tel:+2250707900890" style="color: #F3EDE4; font-size: 17px">(+225) 07 07 90 08 90</a>
+        <a href="tel:+2252722289669" style="color: #F3EDE4; font-size: 17px">(+225) 27 22 28 96 69 (fixe)</a>
+      </div>
+      <div style="display: flex; gap: 8px">
+        <a href="https://wa.me/2250788373737" style="flex: 1 1 0; padding: 18px; background: #009A33; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 20px; text-align: center">WhatsApp</a>
+        <a href="mailto:bas@babsbatsarl-ci.com" style="flex: 1 1 0; padding: 18px; background: #C77B4E; color: #16110D; text-decoration: none; font-weight: 700; font-size: 20px; text-align: center">E-mail</a>
+      </div>
+      <div style="background: #E7DDCF; padding: 28px; display: flex; flex-direction: column; gap: 10px; font-size: 17px; line-height: 1.5">
+        <span class="mono" style="color: #5A4C42">Adresse</span>
+        <span>Abidjan Cocody Riviera Faya, bd Mitterrand, face à l'église orthodoxe, au-dessus de la banque BOA</span>
+        <span>BP 482 Bingerville</span>
+        <a href="mailto:bas@babsbatsarl-ci.com">bas@babsbatsarl-ci.com</a>
+      </div>
+      <div style="background: #E7DDCF; padding: 28px; display: flex; flex-direction: column; gap: 8px; font-size: 17px">
+        <span class="mono" style="color: #5A4C42">Horaires</span>
+        <span>Lundi – vendredi : 8 h – 17 h</span>
+        <span>Samedi : 9 h – 12 h</span>
+      </div>
+      <div style="height: 220px; background: #D9CDBB; display: flex; align-items: flex-end; padding: 16px; box-sizing: border-box"><span class="mono" style="color: #5A4C42">Carte Google Maps — Riviera Faya</span></div>
+    </aside>
+  </div>
+</section>
+
+<footer style="background: #16110D; color: #F3EDE4">
+  <div class="wrap" style="padding-top: 48px; padding-bottom: 32px; display: flex; flex-wrap: wrap; gap: 20px 48px; align-items: center; justify-content: space-between">
+    <span class="dsp" style="font-size: 40px; color: #F39200">Bâtissons ensemble.</span>
+    <span class="mono" style="text-transform: none">babsbatsarl-ci.com</span>
+    <span class="mono" style="color: #A8998C; font-size: 12px">© 2026 BAB'S-BAT SARL</span>
+  </div>
+</footer>
+
+</div>
+<script>
+(function () {
+var list = ['Construction', 'Villa à Songon', 'Lotissement', 'Location-vente', 'Gestion immobilière', 'Vidéosurveillance', 'Solaire', 'Autre'], cur = 'Construction';
+var base = 'min-height: 56px; padding: 0 20px; border-radius: 0; font: 400 20px Anton, sans-serif; text-transform: uppercase; letter-spacing: .5px; cursor: pointer; border: 2px solid #16110D;';
+var sEl = document.getElementById('services'), form = document.getElementById('devis'), ok = document.getElementById('merci');
+function render() {
+  sEl.innerHTML = '';
+  list.forEach(function (s) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = s; b.setAttribute('aria-pressed', s === cur ? 'true' : 'false');
+    b.style.cssText = base + (s === cur ? ' background: #16110D; color: #F3EDE4;' : ' background: #FBF8F3; color: #16110D;');
+    b.addEventListener('click', function () { cur = s; render(); });
+    sEl.appendChild(b);
+  });
+}
+form.addEventListener('submit', function (e) { e.preventDefault(); document.getElementById('chosen').textContent = cur.toLowerCase(); form.style.display = 'none'; ok.style.display = 'flex'; });
+document.getElementById('again').addEventListener('click', function () { ok.style.display = 'none'; form.style.display = 'flex'; });
+render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Contact.dc.html": {
+      "expand": "fill",
+      "h": 2100,
+      "is_interactive": true,
+      "title": "Contact & devis",
+      "w": 1440,
+      "x": 4560,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "expand": "fill",
+      "h": 8200,
+      "is_interactive": true,
+      "title": "Accueil",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Realisations.dc.html": {
+      "expand": "fill",
+      "h": 2700,
+      "is_interactive": true,
+      "title": "Chantiers",
+      "w": 1440,
+      "x": 3040,
+      "y": 0
+    },
+    "Services.dc.html": {
+      "expand": "fill",
+      "h": 2900,
+      "is_interactive": true,
+      "title": "Métiers",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-11-24T10:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "titre": {
+      "kind": "title1",
+      "maxW": 6000,
+      "text": "BAB'S-BAT SARL — maquette du site vitrine",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Services.dc.html",
+    "Realisations.dc.html",
+    "Contact.dc.html"
+  ],
+  "pages": [],
+  "title": "Site vitrine BAB'S-BAT"
+}
