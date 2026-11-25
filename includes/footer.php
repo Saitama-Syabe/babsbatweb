@@ -51,6 +51,10 @@ $year   = date('Y');
 <?php endif; ?>
 </footer>
 
-<script src="js/main.js?v=2" defer></script>
+<a href="#" class="to-top" data-to-top aria-label="Remonter en haut de la page" title="Haut de page">
+  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M12 5l-7 7m7-7l7 7M12 5v14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square"/></svg>
+</a>
+
+<script src="js/main.js?v=4" defer></script>
 </body>
 </html>

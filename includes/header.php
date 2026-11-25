@@ -33,12 +33,13 @@ $canonical   = SITE['url'] . '/' . ($page === 'index.php' ? '' : $page);
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=6">
+<link rel="stylesheet" href="css/style.css?v=8">
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 <a class="skip-link" href="#contenu">Aller au contenu</a>
 
-<header class="site-header">
+<header class="site-header" data-header>
   <div class="wrap site-header__inner">
     <a href="index.php" class="brand" aria-label="<?= e(SITE['legal']) ?> — accueil">
       <?php include __DIR__ . '/logo.svg.php'; ?>
@@ -47,7 +48,11 @@ $canonical   = SITE['url'] . '/' . ($page === 'index.php' ? '' : $page);
         <span class="mono brand__tag"><?= e(SITE['slogan']) ?></span>
       </span>
     </a>
-    <nav aria-label="Navigation principale" class="mono nav">
+    <button type="button" class="nav-toggle mono" data-nav-toggle aria-expanded="false" aria-controls="menu-principal">
+      <span class="nav-toggle__icon" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span data-nav-label>Menu</span>
+    </button>
+    <nav id="menu-principal" aria-label="Navigation principale" class="mono nav">
       <?php foreach (NAV as $file => $label): ?>
         <a href="<?= $file ?>"<?= $file === $page ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>
       <?php endforeach; ?>

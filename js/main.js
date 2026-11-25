@@ -112,6 +112,61 @@
     });
   }
 
+  /* En-tête collant : hauteur (pour les ancres), ombre au défilement, menu mobile */
+  var header = document.querySelector('[data-header]');
+  if (header) {
+    var root = document.documentElement;
+    var setH = function () { root.style.setProperty('--header-h', header.offsetHeight + 'px'); };
+    setH();
+    window.addEventListener('resize', setH);
+    window.addEventListener('load', setH);
+    var shade = function () { header.classList.toggle('is-scrolled', window.scrollY > 4); };
+    window.addEventListener('scroll', shade, { passive: true });
+    shade();
+
+    var toggle = header.querySelector('[data-nav-toggle]');
+    var nav = document.getElementById('menu-principal');
+    var label = header.querySelector('[data-nav-label]');
+    if (toggle && nav) {
+      var setOpen = function (open) {
+        nav.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (label) label.textContent = open ? 'Fermer' : 'Menu';
+      };
+      toggle.addEventListener('click', function () { setOpen(!nav.classList.contains('is-open')); });
+      nav.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && nav.classList.contains('is-open')) { setOpen(false); toggle.focus(); }
+      });
+      document.addEventListener('click', function (e) {
+        if (nav.classList.contains('is-open') && !header.contains(e.target)) setOpen(false);
+      });
+      window.matchMedia('(min-width: 761px)').addEventListener('change', function (m) { if (m.matches) setOpen(false); });
+    }
+  }
+
+  /* Bouton « haut de page » */
+  var toTop = document.querySelector('[data-to-top]');
+  if (toTop) {
+    var ticking = false;
+    function onScroll() {
+      toTop.classList.toggle('is-visible', window.scrollY > 600);
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+    }, { passive: true });
+    onScroll();
+    toTop.addEventListener('click', function (e) {
+      e.preventDefault();
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      // Replace le focus clavier en haut de page
+      var brand = document.querySelector('.brand');
+      if (brand) brand.focus({ preventScroll: true });
+    });
+  }
+
   /* Focus sur le message de confirmation / d'erreur du formulaire */
   var focusEl = document.querySelector('[data-autofocus]');
   if (focusEl) focusEl.focus();
