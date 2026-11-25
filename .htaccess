@@ -1,0 +1,36 @@
+# BAB'S-BAT — configuration Apache
+Options -Indexes
+DirectoryIndex index.php
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Anciennes pages (v1) -> nouvelles pages (redirection permanente)
+  RewriteRule ^galerie\.html$          chantiers.php [R=301,L,NC]
+  RewriteRule ^nos_services\.html$     metiers.php   [R=301,L,NC]
+  RewriteRule ^nous_contacter\.html$   contact.php   [R=301,L,NC]
+  RewriteRule ^qui_sommes_nous\.html$  index.php#apropos [R=301,L,NC,NE]
+
+  # Pages de la maquette (.html) -> .php
+  RewriteRule ^(index|metiers|chantiers|contact)\.html$ $1.php [R=301,L,NC]
+
+  # Dossiers internes interdits au public
+  RewriteRule ^(includes|storage|source-maquette)(/|$) - [F,L,NC]
+</IfModule>
+
+# Cache des fichiers statiques
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType video/mp4 "access plus 1 month"
+  ExpiresByType text/css "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
