@@ -6,17 +6,23 @@ AddDefaultCharset UTF-8
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # Calcule le dossier de base (/ en production, /personnalProject/babsbatweb/ sous XAMPP)
+  RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
+  RewriteRule ^(.*)$ - [E=BASE:%1]
+
   # Anciennes pages (v1) -> nouvelles pages (redirection permanente)
-  RewriteRule ^galerie\.html$          chantiers.php [R=301,L,NC]
-  RewriteRule ^nos_services\.html$     metiers.php   [R=301,L,NC]
-  RewriteRule ^nous_contacter\.html$   contact.php   [R=301,L,NC]
-  RewriteRule ^qui_sommes_nous\.html$  index.php#apropos [R=301,L,NC,NE]
+  RewriteRule ^galerie\.html$          %{ENV:BASE}chantiers.php [R=301,L,NC]
+  RewriteRule ^nos_services\.html$     %{ENV:BASE}metiers.php   [R=301,L,NC]
+  RewriteRule ^nous_contacter\.html$   %{ENV:BASE}contact.php   [R=301,L,NC]
+  RewriteRule ^qui_sommes_nous\.html$  %{ENV:BASE}index.php#apropos [R=301,L,NC,NE]
 
   # Pages de la maquette (.html) -> .php
-  RewriteRule ^(index|metiers|chantiers|contact)\.html$ $1.php [R=301,L,NC]
+  RewriteRule ^(index|metiers|chantiers|contact)\.html$ %{ENV:BASE}$1.php [R=301,L,NC]
 
   # Dossiers internes interdits au public
-  RewriteRule ^(includes|storage|source-maquette)(/|$) - [F,L,NC]
+  RewriteRule ^(includes|storage|source-maquette|lib|old)(/|$) - [F,L,NC]
+  # Fichiers techniques interdits au public
+  RewriteRule ^(Dockerfile|README\.md|\.git.*|\.docker.*)$ - [F,L,NC]
 </IfModule>
 
 # Cache des fichiers statiques

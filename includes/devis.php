@@ -84,6 +84,14 @@ function devis_handle(): array
     exit;
 }
 
+/** IP du visiteur (derrière le proxy Traefik de Dokploy, l'IP réelle est dans X-Forwarded-For). */
+function client_ip(): string
+{
+    $fwd = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '')[0]);
+    $ip  = filter_var($fwd, FILTER_VALIDATE_IP) ? $fwd : ($_SERVER['REMOTE_ADDR'] ?? '');
+    return (string) $ip;
+}
+
 function devis_save(array $d): void
 {
     $dir = dirname(__DIR__) . '/storage';
@@ -105,7 +113,7 @@ function devis_save(array $d): void
     $safe = static fn(string $v): string => preg_match('/^[=+\-@]/', $v) ? "'" . $v : $v;
     fputcsv($fh, array_map($safe, [
         date('Y-m-d H:i:s'), SERVICES[$d['service']], $d['nom'], $d['tel'], $d['mail'],
-        $d['lieu'], $d['budget'], $d['msg'], $_SERVER['REMOTE_ADDR'] ?? '',
+        $d['lieu'], $d['budget'], $d['msg'], client_ip(),
     ]), ';');
     fclose($fh);
 }
@@ -125,22 +133,68 @@ function devis_mail(array $d): bool
           . "Message :\n" . ($d['msg'] ?: '—') . "\n\n"
           . "-- \nEnvoyé le " . date('d/m/Y à H:i');
 
+    $replyTo   = $d['mail']; // déjà validée par FILTER_VALIDATE_EMAIL (ou vide)
+    $replyName = $oneLine($d['nom']);
+
+    return SMTP['host'] !== ''
+        ? devis_send_smtp($subject, $body, $replyTo, $replyName)
+        : devis_send_phpmail($subject, $body, $replyTo);
+}
+
+/** Envoi via SMTP authentifié (PHPMailer). */
+function devis_send_smtp(string $subject, string $body, string $replyTo, string $replyName): bool
+{
+    require_once dirname(__DIR__) . '/lib/PHPMailer/Exception.php';
+    require_once dirname(__DIR__) . '/lib/PHPMailer/PHPMailer.php';
+    require_once dirname(__DIR__) . '/lib/PHPMailer/SMTP.php';
+
+    $m = new PHPMailer\PHPMailer\PHPMailer(true);
+    try {
+        $m->isSMTP();
+        $m->Host       = SMTP['host'];
+        $m->Port       = SMTP['port'];
+        $m->SMTPAuth   = SMTP['user'] !== '';
+        $m->Username   = SMTP['user'];
+        $m->Password   = SMTP['pass'];
+        $m->SMTPSecure = match (SMTP['secure']) {
+            'ssl'   => PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS,
+            'none'  => '',
+            default => PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS,
+        };
+        if (SMTP['secure'] === 'none') {
+            $m->SMTPAutoTLS = false;
+        }
+        $m->Timeout = 15;
+        $m->CharSet = PHPMailer\PHPMailer\PHPMailer::CHARSET_UTF8;
+
+        $m->setFrom(SMTP['from'], SMTP['from_name']);
+        $m->addAddress(CONTACT_TO);
+        if ($replyTo !== '') {
+            $m->addReplyTo($replyTo, $replyName);
+        }
+        $m->Subject = $subject;
+        $m->Body    = $body;
+        $m->isHTML(false);
+
+        return $m->send();
+    } catch (Throwable $e) {
+        error_log('[devis] SMTP a échoué : ' . $m->ErrorInfo . ' — demande conservée dans storage/demandes.csv');
+        return false;
+    }
+}
+
+/** Repli : fonction mail() de PHP (rarement disponible dans un conteneur). */
+function devis_send_phpmail(string $subject, string $body, string $replyTo): bool
+{
     $headers = [
-        'From: ' . SITE['legal'] . ' <no-reply@' . SITE['domain'] . '>',
+        'From: ' . SMTP['from_name'] . ' <' . SMTP['from'] . '>',
         'Content-Type: text/plain; charset=UTF-8',
         'Content-Transfer-Encoding: 8bit',
-        'X-Mailer: PHP',
     ];
-    if ($d['mail'] !== '') {
-        $headers[] = 'Reply-To: ' . $d['mail']; // déjà validée par FILTER_VALIDATE_EMAIL
+    if ($replyTo !== '') {
+        $headers[] = 'Reply-To: ' . $replyTo;
     }
-
-    $ok = @mail(
-        CONTACT_TO,
-        '=?UTF-8?B?' . base64_encode($subject) . '?=',
-        $body,
-        implode("\r\n", $headers)
-    );
+    $ok = @mail(CONTACT_TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\r\n", $headers));
     if (!$ok) {
         error_log('[devis] mail() a échoué — la demande est conservée dans storage/demandes.csv');
     }

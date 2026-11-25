@@ -194,17 +194,10 @@ require __DIR__ . '/includes/header.php';
       <h2 class="dsp h-section">Le chantier,<br>sans filtre</h2>
     </div>
     <div class="videos">
-      <?php
-      $videos = [
-          ['video/video-1.mp4', 'La latérite, matière première de nos briques', 'cover'],
-          ['video/video-2.mp4', 'Des milliers de briques BTCS en séchage', 'contain'],
-          ['video/video-3.mp4', 'Livraison de latérite sur le site de production', 'cover'],
-          ['video/video-4.mp4', 'Les briques prêtes à partir sur le chantier', 'cover'],
-      ];
-      foreach ($videos as $i => [$src, $caption, $fit]): $n = sprintf('%02d', $i + 1); ?>
+      <?php foreach (VIDEOS as $i => $v): $n = sprintf('%02d', $i + 1); ?>
       <figure>
-        <video src="<?= $src ?>" controls muted playsinline preload="metadata" aria-label="Vidéo de chantier <?= $i + 1 ?>" style="object-fit: <?= $fit ?>"></video>
-        <figcaption class="mono"><?= $n ?> — <?= e($caption) ?></figcaption>
+        <video src="<?= e($v['src']) ?>" controls muted playsinline preload="metadata" aria-label="Vidéo de chantier <?= $i + 1 ?> : <?= e($v['caption']) ?>" style="object-fit: <?= $v['fit'] === 'contain' ? 'contain' : 'cover' ?>"></video>
+        <figcaption class="mono"><?= $n ?> — <?= e($v['caption']) ?></figcaption>
       </figure>
       <?php endforeach; ?>
     </div>

@@ -1,5 +1,6 @@
 .idea/
 storage/*
 !storage/.htaccess
+includes/config.local.php
 .DS_Store
 Thumbs.db

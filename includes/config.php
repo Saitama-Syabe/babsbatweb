@@ -26,14 +26,56 @@ const PHONES = [
 
 const WHATSAPP = 'https://wa.me/2250788373737';
 
+/**
+ * Lecture d'une variable d'environnement (Dokploy → onglet Environment).
+ * En local (XAMPP), on peut créer includes/config.local.php qui retourne un tableau
+ * ['SMTP_HOST' => '...', ...] — ce fichier est ignoré par git.
+ */
+function env(string $key, string $default = ''): string
+{
+    static $local = null;
+    if ($local === null) {
+        $file  = __DIR__ . '/config.local.php';
+        $local = is_file($file) ? (array) require $file : [];
+    }
+    $v = getenv($key);
+    if ($v === false || $v === '') {
+        $v = $_ENV[$key] ?? $_SERVER[$key] ?? $local[$key] ?? $default;
+    }
+    return (string) $v;
+}
+
 /** Adresse qui reçoit les demandes de devis. */
-const CONTACT_TO = 'bas@babsbatsarl-ci.com';
+define('CONTACT_TO', env('CONTACT_TO', 'bas@babsbatsarl-ci.com'));
+
+/** Envoi des e-mails par SMTP (si SMTP_HOST est vide, repli sur mail()). */
+define('SMTP', [
+    'host'      => env('SMTP_HOST'),
+    'port'      => (int) env('SMTP_PORT', '587'),
+    'user'      => env('SMTP_USER'),
+    'pass'      => env('SMTP_PASS'),
+    'secure'    => strtolower(env('SMTP_SECURE', 'tls')), // tls (587) | ssl (465) | none
+    'from'      => env('MAIL_FROM', 'no-reply@babsbatsarl-ci.com'),
+    'from_name' => env('MAIL_FROM_NAME', "Site BAB'S-BAT"),
+]);
 
 /** Pages du menu principal : fichier => libellé */
 const NAV = [
     'index.php'     => 'Accueil',
     'metiers.php'   => 'Métiers',
     'chantiers.php' => 'Chantiers',
+];
+
+/**
+ * Vidéos de la page d'accueil (section « Sur le terrain »).
+ * 'src' : chemin local (video/…) ou URL complète (ex. MinIO : https://…/video-1.mp4).
+ * 'fit' : cover (remplit le cadre) ou contain (vidéo entière, bandes noires).
+ */
+const VIDEOS = [
+    ['src' => 'video/video-1.mp4', 'caption' => 'La latérite, matière première de nos briques',        'fit' => 'cover'],
+    ['src' => 'video/video-2.mp4', 'caption' => 'Des milliers de briques BTCS en séchage',             'fit' => 'contain'],
+    ['src' => 'video/video-3.mp4', 'caption' => 'Livraison de latérite sur le site de production',     'fit' => 'cover'],
+    ['src' => 'video/video-4.mp4', 'caption' => 'Les briques prêtes à partir sur le chantier',         'fit' => 'cover'],
 ];
 
 /** Les métiers proposés dans le formulaire de devis. */

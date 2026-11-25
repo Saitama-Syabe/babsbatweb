@@ -1,0 +1,13 @@
+# Ne pas embarquer dans l'image
+.git
+.gitignore
+.idea
+.dockerignore
+Dockerfile
+README.md
+old
+source-maquette
+storage/*
+!storage/.htaccess
+includes/config.local.php
+*.md
