@@ -44,7 +44,7 @@ require __DIR__ . '/includes/header.php';
         <div class="thanks" role="status" tabindex="-1" data-autofocus>
           <span class="mono">Demande reçue</span>
           <h2 class="dsp">La première brique est posée</h2>
-          <p>Merci ! Un conseiller BAB'S-BAT vous rappelle sous [48 h] pour préciser votre projet (<?= e(mb_strtolower($sentService)) ?>).</p>
+          <p>Merci ! Un conseiller BAB'S-BAT vous rappelle sous 48 à 72 h pour préciser votre projet (<?= e(mb_strtolower($sentService)) ?>).</p>
           <a href="contact.php" class="btn btn--outline-light">Envoyer une autre demande</a>
         </div>
       <?php else: ?>

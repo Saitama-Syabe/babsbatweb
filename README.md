@@ -34,9 +34,4 @@ On travaille sur `dev`, puis on fusionne dans `main` une fois validé.
 
 Recherche : `grep -rn "\[" *.php` : les éléments entre crochets `[ … ]`.
 
-- Chiffres clés (années d'expérience, maisons livrées, briques produites)
-- Témoignage client
-- Légendes des 4 vidéos
-- Lotissement : surface et prix des lots
-- Location-vente : apport et durée
-- Délai de rappel après une demande de devis (actuellement « [48 h] »)
+- Témoignage client réel (à saisir dans `chantiers.php`, variable `$testimonial` : la section s'affiche dès qu'elle est remplie)

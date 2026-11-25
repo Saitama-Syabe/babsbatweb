@@ -63,15 +63,24 @@ $count = count($projects);
   </div>
 </dialog>
 
+<?php
+// Témoignage : la section s'affiche dès que 'quote' est rempli (avec l'accord écrit du client).
+$testimonial = [
+    'quote'  => '',
+    'author' => '',   // ex. 'M. Kouadio'
+    'detail' => '',   // ex. 'Villa 6 pièces, Songon'
+];
+if ($testimonial['quote'] !== ''): ?>
 <section>
   <div class="wrap testimonial">
     <span class="mono eyebrow">Parole de client</span>
     <blockquote>
-      <p class="dsp">« [Témoignage client à compléter.] »</p>
-      <footer class="mono">[Nom du client] — [Projet, quartier]</footer>
+      <p class="dsp">« <?= e($testimonial['quote']) ?> »</p>
+      <footer class="mono"><?= e($testimonial['author']) ?> — <?= e($testimonial['detail']) ?></footer>
     </blockquote>
   </div>
 </section>
+<?php endif; ?>
 
 <section class="t-orange">
   <div class="wrap cta-band__inner">

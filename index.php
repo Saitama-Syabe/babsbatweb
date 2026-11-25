@@ -195,12 +195,11 @@ require __DIR__ . '/includes/header.php';
     </div>
     <div class="videos">
       <?php
-      // TODO légendes à fournir par le client
       $videos = [
-          ['video/video-1.mp4', '[Légende vidéo 1]', 'cover'],
-          ['video/video-2.mp4', '[Légende vidéo 2]', 'contain'],
-          ['video/video-3.mp4', '[Légende vidéo 3]', 'cover'],
-          ['video/video-4.mp4', '[Légende vidéo 4]', 'cover'],
+          ['video/video-1.mp4', 'La latérite, matière première de nos briques', 'cover'],
+          ['video/video-2.mp4', 'Des milliers de briques BTCS en séchage', 'contain'],
+          ['video/video-3.mp4', 'Livraison de latérite sur le site de production', 'cover'],
+          ['video/video-4.mp4', 'Les briques prêtes à partir sur le chantier', 'cover'],
       ];
       foreach ($videos as $i => [$src, $caption, $fit]): $n = sprintf('%02d', $i + 1); ?>
       <figure>
@@ -244,9 +243,9 @@ require __DIR__ . '/includes/header.php';
         <footer class="mono"><?= e(SITE['manager']) ?> — Gérant</footer>
       </blockquote>
       <div class="stats">
-        <div><strong class="dsp">[XX]</strong><span class="mono">ans d'expérience</span></div>
-        <div><strong class="dsp">[XX]</strong><span class="mono">maisons livrées</span></div>
-        <div><strong class="dsp">[XX]</strong><span class="mono">briques produites</span></div>
+        <div><strong class="dsp">3</strong><span class="mono">ans d'expérience</span></div>
+        <div><strong class="dsp">20</strong><span class="mono">maisons livrées</span></div>
+        <div><strong class="dsp">+100&nbsp;000</strong><span class="mono">briques produites</span></div>
       </div>
     </div>
   </div>
