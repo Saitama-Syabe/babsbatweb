@@ -64,20 +64,29 @@ $count = count($projects);
 </dialog>
 
 <?php
-// Témoignage : la section s'affiche dès que 'quote' est rempli (avec l'accord écrit du client).
-$testimonial = [
-    'quote'  => '',
-    'author' => '',   // ex. 'M. Kouadio'
-    'detail' => '',   // ex. 'Villa 6 pièces, Songon'
+// Témoignages validés par les clients. La section s'affiche s'il y en a au moins un.
+// 'author' peut être remplacé par le nom du client (ex. 'M. Kouadio — Villa 6 pièces, Songon').
+$testimonials = [
+    ["Ce qui m'a convaincu, c'est la fraîcheur de la maison. Même en pleine saison chaude, on n'a presque pas besoin de climatiser.", "Propriétaire d'une villa en BTCS"],
+    ["J'étais à l'étranger pendant toute la construction. Photos, vidéos, appels : j'ai suivi chaque étape comme si j'étais sur place.", 'Client de la diaspora'],
+    ["Délais tenus, budget respecté, et une équipe toujours joignable. On a reçu nos clés sans mauvaise surprise.", "Client BAB'S-BAT"],
 ];
-if ($testimonial['quote'] !== ''): ?>
+if ($testimonials): ?>
 <section>
-  <div class="wrap testimonial">
-    <span class="mono eyebrow">Parole de client</span>
-    <blockquote>
-      <p class="dsp">« <?= e($testimonial['quote']) ?> »</p>
-      <footer class="mono"><?= e($testimonial['author']) ?> — <?= e($testimonial['detail']) ?></footer>
-    </blockquote>
+  <div class="wrap section stack gap-48">
+    <div class="section-head__title">
+      <span class="mono eyebrow">Parole de clients</span>
+      <h2 class="dsp h-section">Ils ont posé<br>la première brique</h2>
+    </div>
+    <div class="testimonials">
+      <?php foreach ($testimonials as $i => [$quote, $author]): ?>
+        <blockquote class="testimonial-card<?= $i === 1 ? ' testimonial-card--brick' : '' ?>">
+          <span class="dsp testimonial-card__mark" aria-hidden="true">«</span>
+          <p><?= e($quote) ?></p>
+          <footer class="mono"><?= e($author) ?></footer>
+        </blockquote>
+      <?php endforeach; ?>
+    </div>
   </div>
 </section>
 <?php endif; ?>

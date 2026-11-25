@@ -376,10 +376,17 @@ body.lb-open { overflow: hidden; }
   .lightbox__figure { padding-bottom: 72px; }
 }
 
-.testimonial { display: flex; flex-wrap: wrap; gap: 32px 64px; align-items: flex-start; padding-top: 96px; padding-bottom: 96px; }
-.testimonial > .mono { flex: 0 1 220px; }
-.testimonial blockquote { margin: 0; flex: 1 1 560px; display: flex; flex-direction: column; gap: 20px; }
-.testimonial blockquote p { font-size: clamp(32px, 4vw, 56px); line-height: 1.15; }
+.testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 8px; }
+.testimonial-card {
+  margin: 0; padding: 32px 28px 28px; background: var(--sand);
+  display: flex; flex-direction: column; gap: 18px;
+}
+.testimonial-card p { font-size: 21px; line-height: 1.5; font-weight: 600; flex: 1; }
+.testimonial-card footer { color: var(--brick-dark); }
+.testimonial-card__mark { font-size: 72px; line-height: .6; color: var(--orange); height: 36px; }
+.testimonial-card--brick { background: var(--brick); color: var(--paper); }
+.testimonial-card--brick footer { color: var(--orange-light); }
+.testimonial-card--brick .testimonial-card__mark { color: var(--ink); }
 
 /* =========================================================
    CONTACT

@@ -34,4 +34,4 @@ On travaille sur `dev`, puis on fusionne dans `main` une fois validé.
 
 Recherche : `grep -rn "\[" *.php` : les éléments entre crochets `[ … ]`.
 
-- Témoignage client réel (à saisir dans `chantiers.php`, variable `$testimonial` : la section s'affiche dès qu'elle est remplie)
+- Noms des clients des témoignages (optionnel, dans `chantiers.php`, tableau `$testimonials`)
