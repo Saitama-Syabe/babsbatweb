@@ -578,4 +578,15 @@ body.lb-open { overflow: hidden; }
 .grecaptcha-badge { visibility: hidden !important; }
 .recaptcha-note { font-size: 13px; line-height: 1.5; color: var(--muted); margin-top: -16px; }
 .recaptcha-note a { color: var(--muted); }
-.form__submit[aria-busy="true"] { opacity: .7; cursor: progress; }
+
+
+/* ---------- Bouton en cours d'envoi ---------- */
+.form__submit { display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+.form__submit.is-loading, .form__submit:disabled { cursor: progress; background: var(--orange-light); }
+.spinner {
+  width: 18px; height: 18px; flex: none; border-radius: 50%;
+  border: 3px solid currentColor; border-right-color: transparent;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2s; } }

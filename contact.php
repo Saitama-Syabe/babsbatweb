@@ -122,6 +122,7 @@ require __DIR__ . '/includes/header.php';
 
           <div class="form__foot">
             <span class="form__note"><span class="req">*</span> Champs obligatoires. Vos données ne servent qu'à traiter votre demande.</span>
+            <span class="visually-hidden" role="status" aria-live="polite" data-form-status></span>
             <button type="submit" class="btn btn--orange form__submit">Envoyer ma demande →</button>
           </div>
           <?php if (RECAPTCHA_ON): ?>

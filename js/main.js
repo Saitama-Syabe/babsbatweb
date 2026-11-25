@@ -167,13 +167,46 @@
     });
   }
 
+  /* Indicateur de chargement du formulaire de devis (bouton « Envoi en cours… », anti double-clic) */
+  function setLoading(form, on) {
+    var btn = form.querySelector('[type="submit"]');
+    if (!btn) return;
+    if (on) {
+      if (!btn.hasAttribute('data-label')) btn.setAttribute('data-label', btn.innerHTML);
+      btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>Envoi en cours…';
+      btn.disabled = true;
+      btn.setAttribute('aria-busy', 'true');
+      btn.classList.add('is-loading');
+      var live = form.querySelector('[data-form-status]');
+      if (live) live.textContent = 'Envoi de votre demande en cours, veuillez patienter.';
+    } else if (btn.hasAttribute('data-label')) {
+      btn.innerHTML = btn.getAttribute('data-label');
+      btn.disabled = false;
+      btn.removeAttribute('aria-busy');
+      btn.classList.remove('is-loading');
+    }
+  }
+  document.querySelectorAll('form.form').forEach(function (form) {
+    // Formulaire sans reCAPTCHA : le chargement démarre à l'envoi normal
+    if (!form.hasAttribute('data-recaptcha')) {
+      form.addEventListener('submit', function (e) {
+        if (form.querySelector('[aria-busy="true"]')) { e.preventDefault(); return; } // double clic
+        setLoading(form, true);
+      });
+    }
+  });
+  // Retour arrière du navigateur (page restaurée depuis le cache) : on réactive le bouton
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) document.querySelectorAll('form.form').forEach(function (f) { setLoading(f, false); });
+  });
+
   /* reCAPTCHA v3 : obtient un jeton juste avant l'envoi du formulaire de devis */
   var rcForm = document.querySelector('form[data-recaptcha]');
   if (rcForm) {
     var rcKey = rcForm.getAttribute('data-recaptcha');
     var rcAction = rcForm.getAttribute('data-recaptcha-action') || 'devis';
     var rcField = rcForm.querySelector('input[name="g-recaptcha-response"]');
-    var rcBtn = rcForm.querySelector('[type="submit"]');
+
     var rcBusy = false;
     var sent = false;
     // Envoi unique : avec le jeton s'il est arrivé, sinon sans (le serveur affichera un message clair)
@@ -185,11 +218,11 @@
     rcForm.addEventListener('submit', function (e) {
       e.preventDefault();
       if (rcBusy) return;
+      rcBusy = true;
+      setLoading(rcForm, true);
       // reCAPTCHA Enterprise (grecaptcha.enterprise) ou classique (grecaptcha)
       var api = window.grecaptcha && (window.grecaptcha.enterprise || window.grecaptcha);
       if (!api || !api.execute) { sendForm(); return; } // script Google bloqué
-      rcBusy = true;
-      if (rcBtn) { rcBtn.disabled = true; rcBtn.setAttribute('aria-busy', 'true'); }
       // Filet de sécurité : si Google ne répond pas (clé invalide, réseau), on envoie quand même au bout de 8 s
       var guard = setTimeout(sendForm, 8000);
       try {
