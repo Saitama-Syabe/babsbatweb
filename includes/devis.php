@@ -79,6 +79,16 @@ function devis_handle(): array
         }
     }
 
+    // --- reCAPTCHA v3 ---
+    if (!$errors && !$isBot && $spamReason === null && RECAPTCHA_ON) {
+        [$human, $why] = recaptcha_verify((string) ($_POST['g-recaptcha-response'] ?? ''));
+        if (!$human) {
+            spam_log($old, 'reCAPTCHA : ' . $why);
+            $errors['global'] = 'Nous n\'avons pas pu vérifier votre demande. Merci de réessayer, '
+                . 'ou appelez-nous au ' . PHONES['main'][0] . '.';
+        }
+    }
+
     // --- Limite par adresse IP ---
     if (!$errors && !$isBot && $spamReason === null && !rate_limit_ok()) {
         $errors['global'] = 'Trop de demandes ont été envoyées depuis votre connexion. Merci de réessayer dans une heure, ou appelez-nous directement.';
@@ -210,6 +220,96 @@ function spam_check(array $d): array
         return ['Indiquez votre nom et prénom.', false];
     }
     return [null, false];
+}
+
+/**
+ * Vérifie le jeton reCAPTCHA v3 auprès de Google.
+ * Retourne [true si humain, raison du refus].
+ * Si Google est injoignable, on laisse passer (les autres protections restent actives)
+ * plutôt que de bloquer de vrais clients.
+ */
+function recaptcha_verify(string $token): array
+{
+    if ($token === '') {
+        return [false, 'jeton absent (JavaScript désactivé ou robot)'];
+    }
+    if (RECAPTCHA_MODE === 'enterprise') {
+        return recaptcha_verify_enterprise($token);
+    }
+    $ctx = stream_context_create(['http' => [
+        'method'  => 'POST',
+        'header'  => "Content-Type: application/x-www-form-urlencoded\r\n",
+        'content' => http_build_query([
+            'secret'   => RECAPTCHA['secret'],
+            'response' => $token,
+            'remoteip' => client_ip(),
+        ]),
+        'timeout' => 6,
+    ]]);
+    $raw = @file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $ctx);
+    if ($raw === false) {
+        error_log('[devis] reCAPTCHA injoignable, demande acceptée sans vérification');
+        return [true, ''];
+    }
+    $r = json_decode($raw, true) ?: [];
+    if (empty($r['success'])) {
+        return [false, 'jeton invalide (' . implode(',', (array) ($r['error-codes'] ?? [])) . ')'];
+    }
+    if (($r['action'] ?? '') !== RECAPTCHA['action']) {
+        return [false, 'action inattendue « ' . ($r['action'] ?? '') . ' »'];
+    }
+    $score = (float) ($r['score'] ?? 0);
+    if ($score < RECAPTCHA['min_score']) {
+        return [false, 'score ' . $score . ' < ' . RECAPTCHA['min_score']];
+    }
+    return [true, ''];
+}
+
+/**
+ * reCAPTCHA Enterprise : création d'une « évaluation » via l'API Google Cloud.
+ * https://cloud.google.com/recaptcha/docs/create-assessment-website
+ */
+function recaptcha_verify_enterprise(string $token): array
+{
+    $url = 'https://recaptchaenterprise.googleapis.com/v1/projects/'
+         . rawurlencode(RECAPTCHA['project_id']) . '/assessments?key=' . rawurlencode(RECAPTCHA['api_key']);
+    $body = json_encode(['event' => [
+        'token'          => $token,
+        'siteKey'        => RECAPTCHA['site_key'],
+        'expectedAction' => RECAPTCHA['action'],
+        'userIpAddress'  => client_ip(),
+        'userAgent'      => (string) ($_SERVER['HTTP_USER_AGENT'] ?? ''),
+    ]]);
+    $ctx = stream_context_create(['http' => [
+        'method'        => 'POST',
+        'header'        => "Content-Type: application/json\r\n",
+        'content'       => $body,
+        'timeout'       => 6,
+        'ignore_errors' => true, // pour lire le message d'erreur JSON en cas de 4xx
+    ]]);
+    $raw = @file_get_contents($url, false, $ctx);
+    if ($raw === false) {
+        error_log('[devis] reCAPTCHA Enterprise injoignable, demande acceptée sans vérification');
+        return [true, ''];
+    }
+    $r = json_decode($raw, true) ?: [];
+    if (isset($r['error'])) {
+        // Erreur de configuration (clé API, projet, API non activée) : on ne bloque pas les clients
+        error_log('[devis] reCAPTCHA Enterprise — erreur de configuration : ' . ($r['error']['message'] ?? $raw));
+        return [true, ''];
+    }
+    $tp = $r['tokenProperties'] ?? [];
+    if (empty($tp['valid'])) {
+        return [false, 'jeton invalide (' . ($tp['invalidReason'] ?? '?') . ')'];
+    }
+    if (($tp['action'] ?? '') !== RECAPTCHA['action']) {
+        return [false, 'action inattendue « ' . ($tp['action'] ?? '') . ' »'];
+    }
+    $score = (float) ($r['riskAnalysis']['score'] ?? 0);
+    if ($score < RECAPTCHA['min_score']) {
+        return [false, 'score ' . $score . ' < ' . RECAPTCHA['min_score']];
+    }
+    return [true, ''];
 }
 
 /** Conserve les demandes rejetées comme spam (pour repérer d'éventuels faux positifs). */

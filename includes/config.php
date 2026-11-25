@@ -59,6 +59,28 @@ define('SMTP', [
     'from_name' => env('MAIL_FROM_NAME', "Site BAB'S-BAT"),
 ]);
 
+/**
+ * Google reCAPTCHA (invisible, basé sur un score). Désactivé tant qu'il n'est pas configuré.
+ *
+ * Deux modes, choisis automatiquement selon les variables renseignées :
+ *  - Enterprise (clé créée dans Google Cloud Console) :
+ *      RECAPTCHA_SITE_KEY + RECAPTCHA_PROJECT_ID + RECAPTCHA_API_KEY
+ *  - Classique v3 (clé créée sur google.com/recaptcha/admin) :
+ *      RECAPTCHA_SITE_KEY + RECAPTCHA_SECRET
+ */
+define('RECAPTCHA', [
+    'site_key'   => env('RECAPTCHA_SITE_KEY'),
+    'secret'     => env('RECAPTCHA_SECRET'),
+    'project_id' => env('RECAPTCHA_PROJECT_ID'),
+    'api_key'    => env('RECAPTCHA_API_KEY'),
+    'min_score'  => (float) env('RECAPTCHA_MIN_SCORE', '0.5'), // 0.0 = robot … 1.0 = humain
+    'action'     => 'devis',
+]);
+define('RECAPTCHA_MODE', RECAPTCHA['site_key'] === '' ? ''
+    : (RECAPTCHA['project_id'] !== '' && RECAPTCHA['api_key'] !== '' ? 'enterprise'
+    : (RECAPTCHA['secret'] !== '' ? 'classic' : '')));
+define('RECAPTCHA_ON', RECAPTCHA_MODE !== '');
+
 /** Pages du menu principal : fichier => libellé */
 const NAV = [
     'index.php'     => 'Accueil',

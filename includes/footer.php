@@ -55,6 +55,6 @@ $year   = date('Y');
   <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M12 5l-7 7m7-7l7 7M12 5v14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square"/></svg>
 </a>
 
-<script src="js/main.js?v=4" defer></script>
+<script src="js/main.js?v=6" defer></script>
 </body>
 </html>

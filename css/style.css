@@ -572,3 +572,10 @@ body.lb-open { overflow: hidden; }
   .numlist__text { font-size: 19px; }
   .testimonial-card { padding: 26px 22px 22px; }
 }
+
+/* ---------- reCAPTCHA ---------- */
+/* Le badge flottant de Google est masqué : la mention légale est affichée sous le formulaire (autorisé par Google) */
+.grecaptcha-badge { visibility: hidden !important; }
+.recaptcha-note { font-size: 13px; line-height: 1.5; color: var(--muted); margin-top: -16px; }
+.recaptcha-note a { color: var(--muted); }
+.form__submit[aria-busy="true"] { opacity: .7; cursor: progress; }

@@ -167,6 +167,43 @@
     });
   }
 
+  /* reCAPTCHA v3 : obtient un jeton juste avant l'envoi du formulaire de devis */
+  var rcForm = document.querySelector('form[data-recaptcha]');
+  if (rcForm) {
+    var rcKey = rcForm.getAttribute('data-recaptcha');
+    var rcAction = rcForm.getAttribute('data-recaptcha-action') || 'devis';
+    var rcField = rcForm.querySelector('input[name="g-recaptcha-response"]');
+    var rcBtn = rcForm.querySelector('[type="submit"]');
+    var rcBusy = false;
+    var sent = false;
+    // Envoi unique : avec le jeton s'il est arrivé, sinon sans (le serveur affichera un message clair)
+    function sendForm() {
+      if (sent) return;
+      sent = true;
+      rcForm.submit();
+    }
+    rcForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (rcBusy) return;
+      // reCAPTCHA Enterprise (grecaptcha.enterprise) ou classique (grecaptcha)
+      var api = window.grecaptcha && (window.grecaptcha.enterprise || window.grecaptcha);
+      if (!api || !api.execute) { sendForm(); return; } // script Google bloqué
+      rcBusy = true;
+      if (rcBtn) { rcBtn.disabled = true; rcBtn.setAttribute('aria-busy', 'true'); }
+      // Filet de sécurité : si Google ne répond pas (clé invalide, réseau), on envoie quand même au bout de 8 s
+      var guard = setTimeout(sendForm, 8000);
+      try {
+        api.ready(function () {
+          api.execute(rcKey, { action: rcAction }).then(function (token) {
+            clearTimeout(guard);
+            rcField.value = token;
+            sendForm();
+          }, function () { clearTimeout(guard); sendForm(); });
+        });
+      } catch (err) { clearTimeout(guard); sendForm(); }
+    });
+  }
+
   /* Focus sur le message de confirmation / d'erreur du formulaire */
   var focusEl = document.querySelector('[data-autofocus]');
   if (focusEl) focusEl.focus();

@@ -39,6 +39,7 @@ Si `SMTP_HOST` est vide, repli sur `mail()` (rarement disponible dans un contene
 | Champ piège + délai minimal (3 s) | Robot détecté → fausse confirmation, rien n'est envoyé |
 | 1 envoi / minute par session | Évite les doubles envois |
 | **Limite par IP** : 5 demandes / heure (`RATE_LIMIT_PER_HOUR`) | Message « réessayez dans une heure ». IP stockées hachées dans `storage/ratelimit.json` |
+| **reCAPTCHA (invisible)** | Score Google vérifié côté serveur ; score trop bas → message « appelez-nous ». Actif seulement si configuré |
 | **Filtre de contenu** | Liens : aucun dans nom/lieu, 1 max dans le message (erreur affichée). Mots-clés de spam, cyrillique/chinois, balises HTML → rejet silencieux |
 
 Les demandes rejetées comme spam sont conservées dans `storage/spam.csv` : à consulter de temps en temps
@@ -59,6 +60,11 @@ L'IP réelle est lue en dernière position de `X-Forwarded-For` (ajoutée par Tr
 | `MAIL_FROM_NAME` | `Site BAB'S-BAT` | Nom affiché |
 | `CONTACT_TO` | `bas@babsbatsarl-ci.com` | Destinataire des demandes |
 | `RATE_LIMIT_PER_HOUR` | `5` | Demandes max par IP et par heure (facultatif) |
+| `RECAPTCHA_SITE_KEY` | `6Lc…` | Clé du site reCAPTCHA (publique) |
+| `RECAPTCHA_PROJECT_ID` | `babsbat-123456` | **Enterprise** : ID du projet Google Cloud |
+| `RECAPTCHA_API_KEY` | `AIza…` | **Enterprise** : clé API Google Cloud (restreinte à l'API reCAPTCHA Enterprise) |
+| `RECAPTCHA_SECRET` | `6Lc…` | **Classique** uniquement (au lieu des deux précédentes) |
+| `RECAPTCHA_MIN_SCORE` | `0.5` | Score minimal accepté, de 0 (robot) à 1 (humain) (facultatif) |
 | `VIDEO_BASE_URL` | `https://…/other.bucket/video` | Dossier des vidéos (facultatif) |
 
 En local, créer `includes/config.local.php` (ignoré par git) :

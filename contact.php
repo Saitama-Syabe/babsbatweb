@@ -54,8 +54,9 @@ require __DIR__ . '/includes/header.php';
           </div>
         <?php endif; ?>
 
-        <form class="form" method="post" action="contact#formulaire" novalidate>
+        <form class="form" method="post" action="contact#formulaire" novalidate<?php if (RECAPTCHA_ON): ?> data-recaptcha="<?= e(RECAPTCHA['site_key']) ?>" data-recaptcha-action="<?= e(RECAPTCHA['action']) ?>"<?php endif; ?>>
           <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
+          <?php if (RECAPTCHA_ON): ?><input type="hidden" name="g-recaptcha-response" value=""><?php endif; ?>
           <div class="hp" aria-hidden="true">
             <label for="site_web">Ne pas remplir</label>
             <input type="text" id="site_web" name="site_web" tabindex="-1" autocomplete="off">
@@ -123,6 +124,11 @@ require __DIR__ . '/includes/header.php';
             <span class="form__note"><span class="req">*</span> Champs obligatoires. Vos données ne servent qu'à traiter votre demande.</span>
             <button type="submit" class="btn btn--orange form__submit">Envoyer ma demande →</button>
           </div>
+          <?php if (RECAPTCHA_ON): ?>
+          <p class="recaptcha-note">Ce formulaire est protégé par reCAPTCHA. Les
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">règles de confidentialité</a> et les
+            <a href="https://policies.google.com/terms" target="_blank" rel="noopener">conditions d'utilisation</a> de Google s'appliquent.</p>
+          <?php endif; ?>
         </form>
       <?php endif; ?>
     </div>
@@ -154,4 +160,7 @@ require __DIR__ . '/includes/header.php';
   </div>
 </section>
 
+<?php if (RECAPTCHA_ON && !$sent): ?>
+<script src="https://www.google.com/recaptcha/<?= RECAPTCHA_MODE === 'enterprise' ? 'enterprise' : 'api' ?>.js?render=<?= urlencode(RECAPTCHA['site_key']) ?>" async defer></script>
+<?php endif; ?>
 <?php require __DIR__ . '/includes/footer.php'; ?>
