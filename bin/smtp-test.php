@@ -82,16 +82,21 @@ try {
 }
 
 if (in_array('--send', $argv, true)) {
-    echo "\n== 5. Envoi d'un e-mail de test à " . CONTACT_TO . "\n";
-    try {
-        $m = smtp_mailer();
-        $m->addAddress(CONTACT_TO);
-        $m->Subject = 'Test SMTP — site ' . SITE['domain'];
-        $m->Body    = "E-mail de test envoyé par bin/smtp-test.php le " . date('d/m/Y à H:i') . ".\nSi vous le lisez, l'envoi des devis fonctionne.";
-        $m->send();
+    echo "\n== 5. Envoi d'un exemple de demande de devis à " . CONTACT_TO . "\n";
+    // Même modèle que les vraies demandes, avec des données d'exemple clairement identifiées
+    $sample = [
+        'service' => 'construction',
+        'nom'     => 'TEST Client exemple',
+        'tel'     => PHONES['main'][0],
+        'mail'    => SMTP['from'],
+        'lieu'    => 'Cocody, Riviera Faya',
+        'budget'  => BUDGETS[2],
+        'msg'     => "Ceci est un e-mail de test envoyé par bin/smtp-test.php.\nSi vous le lisez, l'envoi des demandes de devis fonctionne.",
+    ];
+    if (devis_mail($sample)) {
         $ok('E-mail envoyé. Vérifiez la boîte de réception (et les spams).');
-    } catch (Throwable $e) {
-        $ko('Échec de l\'envoi : ' . ((isset($m) && $m->ErrorInfo) ? $m->ErrorInfo : $e->getMessage()));
+    } else {
+        $ko('Échec de l\'envoi : voir le message [devis] ci-dessus.');
         exit(1);
     }
 }

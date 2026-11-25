@@ -353,25 +353,17 @@ function devis_save(array $d): void
 
 function devis_mail(array $d): bool
 {
-    $oneLine = static fn(string $v): string => trim(preg_replace('/[\r\n]+/', ' ', $v));
+    require_once __DIR__ . '/mail-devis.php';
 
-    $subject = 'Demande de devis — ' . SERVICES[$d['service']] . ' — ' . $oneLine($d['nom']);
-    $body = "Nouvelle demande depuis le site " . SITE['domain'] . "\n\n"
-          . "Métier     : " . SERVICES[$d['service']] . "\n"
-          . "Nom        : " . $oneLine($d['nom']) . "\n"
-          . "Téléphone  : " . $oneLine($d['tel']) . "\n"
-          . "E-mail     : " . ($d['mail'] ?: '—') . "\n"
-          . "Lieu       : " . ($oneLine($d['lieu']) ?: '—') . "\n"
-          . "Budget     : " . $d['budget'] . "\n\n"
-          . "Message :\n" . ($d['msg'] ?: '—') . "\n\n"
-          . "-- \nEnvoyé le " . date('d/m/Y à H:i');
-
+    $when      = date('d/m/Y') . ' à ' . date('H:i');
+    $subject   = devis_mail_subject($d);
+    $text      = devis_mail_text($d, $when);
     $replyTo   = $d['mail']; // déjà validée par FILTER_VALIDATE_EMAIL (ou vide)
-    $replyName = $oneLine($d['nom']);
+    $replyName = trim(preg_replace('/[\r\n]+/', ' ', $d['nom']));
 
     return SMTP['host'] !== ''
-        ? devis_send_smtp($subject, $body, $replyTo, $replyName)
-        : devis_send_phpmail($subject, $body, $replyTo);
+        ? devis_send_smtp($subject, $text, $replyTo, $replyName, devis_mail_html($d, $when))
+        : devis_send_phpmail($subject, $text, $replyTo);
 }
 
 /**
@@ -406,8 +398,11 @@ function smtp_mailer(): PHPMailer\PHPMailer\PHPMailer
     return $m;
 }
 
-/** Envoi via SMTP authentifié (PHPMailer). */
-function devis_send_smtp(string $subject, string $body, string $replyTo, string $replyName): bool
+/**
+ * Envoi via SMTP authentifié (PHPMailer).
+ * Avec $html : e-mail HTML + version texte, logo joint en image intégrée (cid:logo).
+ */
+function devis_send_smtp(string $subject, string $text, string $replyTo, string $replyName, string $html = ''): bool
 {
     $m = null;
     try {
@@ -417,14 +412,24 @@ function devis_send_smtp(string $subject, string $body, string $replyTo, string 
             $m->addReplyTo($replyTo, $replyName);
         }
         $m->Subject = $subject;
-        $m->Body    = $body;
-        $m->isHTML(false);
+        if ($html !== '') {
+            $m->isHTML(true);
+            $m->Body    = $html;
+            $m->AltBody = $text;
+            $logo = dirname(__DIR__) . '/img/mail-logo.png';
+            if (is_file($logo)) {
+                $m->addEmbeddedImage($logo, 'logo', 'logo.png', 'base64', 'image/png');
+            }
+        } else {
+            $m->isHTML(false);
+            $m->Body = $text;
+        }
 
         return $m->send();
     } catch (Throwable $e) {
         error_log('[devis] SMTP a échoué (' . SMTP['host'] . ':' . SMTP['port'] . ' ' . SMTP['secure'] . ') : '
             . ($m ? $m->ErrorInfo : $e->getMessage())
-            . ' — demande conservée dans storage/demandes.csv. Diagnostic : php bin/smtp-test.php');
+            . '. Demande conservée dans storage/demandes.csv. Diagnostic : php bin/smtp-test.php');
         return false;
     }
 }
