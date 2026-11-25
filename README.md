@@ -67,6 +67,19 @@ L'IP réelle est lue en dernière position de `X-Forwarded-For` (ajoutée par Tr
 | `RECAPTCHA_MIN_SCORE` | `0.5` | Score minimal accepté, de 0 (robot) à 1 (humain) (facultatif) |
 | `VIDEO_BASE_URL` | `https://…/other.bucket/video` | Dossier des vidéos (facultatif) |
 
+### Diagnostic SMTP
+
+Si les logs affichent « SMTP a échoué », ouvrir un terminal dans le conteneur
+(Dokploy → l'application → **Docker → Terminal**, ou `docker exec -it <conteneur> bash`) puis :
+
+```bash
+php bin/smtp-test.php          # configuration, DNS, ports sortants ouverts/bloqués, connexion + authentification
+php bin/smtp-test.php --send   # idem + envoi d'un e-mail de test à CONTACT_TO
+```
+
+Le mot de passe n'est jamais affiché. « Aucun port joignable » = l'hébergeur du serveur bloque le SMTP sortant :
+demander le déblocage au support, ou utiliser un service d'envoi sur le port 2525 (Brevo, Mailgun, SendGrid…).
+
 En local, créer `includes/config.local.php` (ignoré par git) :
 
 ```php

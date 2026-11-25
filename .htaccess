@@ -16,7 +16,7 @@ AddDefaultCharset UTF-8
   RewriteRule ^ - [E=ORIGIN:https://%{HTTP_HOST}]
 
   # Dossiers internes interdits au public
-  RewriteRule ^(includes|storage|source-maquette|lib|old)(/|$) - [F,L,NC]
+  RewriteRule ^(includes|storage|source-maquette|lib|old|bin)(/|$) - [F,L,NC]
   # Fichiers techniques interdits au public
   RewriteRule ^(Dockerfile|README\.md|router\.php|\.git.*|\.docker.*)$ - [F,L,NC]
 

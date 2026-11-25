@@ -374,33 +374,44 @@ function devis_mail(array $d): bool
         : devis_send_phpmail($subject, $body, $replyTo);
 }
 
-/** Envoi via SMTP authentifié (PHPMailer). */
-function devis_send_smtp(string $subject, string $body, string $replyTo, string $replyName): bool
+/**
+ * Prépare un PHPMailer configuré pour le SMTP (utilisé par le site et par bin/smtp-test.php).
+ * Délais courts : si le serveur SMTP est injoignable, le visiteur n'attend pas plus de ~10 s.
+ */
+function smtp_mailer(): PHPMailer\PHPMailer\PHPMailer
 {
     require_once dirname(__DIR__) . '/lib/PHPMailer/Exception.php';
     require_once dirname(__DIR__) . '/lib/PHPMailer/PHPMailer.php';
     require_once dirname(__DIR__) . '/lib/PHPMailer/SMTP.php';
 
     $m = new PHPMailer\PHPMailer\PHPMailer(true);
-    try {
-        $m->isSMTP();
-        $m->Host       = SMTP['host'];
-        $m->Port       = SMTP['port'];
-        $m->SMTPAuth   = SMTP['user'] !== '';
-        $m->Username   = SMTP['user'];
-        $m->Password   = SMTP['pass'];
-        $m->SMTPSecure = match (SMTP['secure']) {
-            'ssl'   => PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS,
-            'none'  => '',
-            default => PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS,
-        };
-        if (SMTP['secure'] === 'none') {
-            $m->SMTPAutoTLS = false;
-        }
-        $m->Timeout = 15;
-        $m->CharSet = PHPMailer\PHPMailer\PHPMailer::CHARSET_UTF8;
+    $m->isSMTP();
+    $m->Host       = SMTP['host'];
+    $m->Port       = SMTP['port'];
+    $m->SMTPAuth   = SMTP['user'] !== '';
+    $m->Username   = SMTP['user'];
+    $m->Password   = SMTP['pass'];
+    $m->SMTPSecure = match (SMTP['secure']) {
+        'ssl'   => PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS,
+        'none'  => '',
+        default => PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS,
+    };
+    if (SMTP['secure'] === 'none') {
+        $m->SMTPAutoTLS = false;
+    }
+    $m->Timeout = 8;                    // connexion au serveur
+    $m->getSMTPInstance()->Timelimit = 10; // attente de chaque réponse du serveur
+    $m->CharSet = PHPMailer\PHPMailer\PHPMailer::CHARSET_UTF8;
+    $m->setFrom(SMTP['from'], SMTP['from_name']);
+    return $m;
+}
 
-        $m->setFrom(SMTP['from'], SMTP['from_name']);
+/** Envoi via SMTP authentifié (PHPMailer). */
+function devis_send_smtp(string $subject, string $body, string $replyTo, string $replyName): bool
+{
+    $m = null;
+    try {
+        $m = smtp_mailer();
         $m->addAddress(CONTACT_TO);
         if ($replyTo !== '') {
             $m->addReplyTo($replyTo, $replyName);
@@ -411,7 +422,9 @@ function devis_send_smtp(string $subject, string $body, string $replyTo, string 
 
         return $m->send();
     } catch (Throwable $e) {
-        error_log('[devis] SMTP a échoué : ' . $m->ErrorInfo . ' — demande conservée dans storage/demandes.csv');
+        error_log('[devis] SMTP a échoué (' . SMTP['host'] . ':' . SMTP['port'] . ' ' . SMTP['secure'] . ') : '
+            . ($m ? $m->ErrorInfo : $e->getMessage())
+            . ' — demande conservée dans storage/demandes.csv. Diagnostic : php bin/smtp-test.php');
         return false;
     }
 }
