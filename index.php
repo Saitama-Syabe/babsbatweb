@@ -240,7 +240,7 @@ require __DIR__ . '/includes/header.php';
       <h2 class="dsp about__title">Des bâtisseurs ivoiriens, de la terre aux clés</h2>
       <p class="text-lg">BAB'S-BAT SARL est une entreprise de BTP spécialisée dans la construction de bâtiments en briques de terre comprimée et stabilisée. Nous fabriquons, bâtissons, lotissons, gérons et sécurisons les biens de nos clients.</p>
       <blockquote class="quote">
-        <p>« [Mot du gérant à compléter.] »</p>
+        <p>« La BTCS consomme moins de ciment, moins de fer, et garde la fraîcheur sans climatisation. Construire mieux, c'est aussi construire plus sobre. »</p>
         <footer class="mono"><?= e(SITE['manager']) ?> — Gérant</footer>
       </blockquote>
       <div class="stats">

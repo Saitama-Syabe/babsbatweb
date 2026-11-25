@@ -35,7 +35,6 @@ On travaille sur `dev`, puis on fusionne dans `main` une fois validé.
 Recherche : `grep -rn "\[" *.php` : les éléments entre crochets `[ … ]`.
 
 - Chiffres clés (années d'expérience, maisons livrées, briques produites)
-- Mot du gérant
 - Témoignage client
 - Légendes des 4 vidéos
 - Lotissement : surface et prix des lots
