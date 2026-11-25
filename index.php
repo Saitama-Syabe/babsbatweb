@@ -28,14 +28,14 @@ require __DIR__ . '/includes/header.php';
           <div class="course"></div><div class="course off"></div><div class="course"></div><div class="course off"></div><div class="course"></div><div class="course off"></div>
         </div>
         <div class="wb" style="left: 62.5%; top: 16.667%; background-color: var(--orange); color: var(--ink)">
-          <span class="dsp" style="font-size: 3.1cqw; white-space: nowrap">75 M FCFA</span>
-          <span class="mono" style="font-size: 1.5cqw">Villa clé en main</span>
+          <span class="dsp wb__big">75 M FCFA</span>
+          <span class="mono wb__small">Villa clé en main</span>
         </div>
         <div class="wb" style="left: 0; top: 66.667%; background-color: var(--green); color: #fff">
-          <span class="dsp" style="font-size: 4.6cqw">BTCS</span>
+          <span class="dsp wb__xl">BTCS</span>
         </div>
         <div class="wb" style="left: 37.5%; top: 83.333%; background-color: var(--paper); color: var(--ink)">
-          <span class="dsp" style="font-size: 3.6cqw">Songon</span>
+          <span class="dsp wb__md">Songon</span>
         </div>
       </div>
     </div>
@@ -174,7 +174,7 @@ require __DIR__ . '/includes/header.php';
       <div class="bricks__row">
         <div class="brick-half" aria-hidden="true" style="background: var(--green)"></div>
         <a href="metiers.php#gestion" class="brick-card"><span class="mono">04</span><span class="brick-card__body"><span class="dsp brick-card__title">Gestion immobilière</span><span class="brick-card__desc">Locataires, loyers, entretien : on gère pour vous.</span></span></a>
-        <a href="metiers.php#securite" class="brick-card brick-card--ink"><span class="mono">05</span><span class="brick-card__body"><span class="dsp brick-card__title">Vidéosurveillance &amp; accès</span><span class="brick-card__desc">Caméras, badges et domotique, entreprises et domiciles.</span></span></a>
+        <a href="metiers.php#securite" class="brick-card brick-card--ink"><span class="mono">05</span><span class="brick-card__body"><span class="dsp brick-card__title">Vidéo&shy;surveillance &amp; accès</span><span class="brick-card__desc">Caméras, badges et domotique, entreprises et domiciles.</span></span></a>
         <div class="brick-half" aria-hidden="true" style="background: var(--brick)"></div>
       </div>
       <div class="bricks__row">

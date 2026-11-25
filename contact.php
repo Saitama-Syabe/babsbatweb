@@ -67,7 +67,7 @@ require __DIR__ . '/includes/header.php';
               <?php foreach (SERVICES as $key => $label): ?>
                 <label class="chip">
                   <input type="radio" name="service" value="<?= e($key) ?>"<?= $old['service'] === $key ? ' checked' : '' ?>>
-                  <span><?= e($label) ?></span>
+                  <span><?= str_replace('Vidéosurveillance', 'Vidéo&shy;surveillance', e($label)) ?></span>
                 </label>
               <?php endforeach; ?>
             </div>

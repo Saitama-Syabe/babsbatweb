@@ -58,7 +58,7 @@ require __DIR__ . '/includes/header.php';
 
     <article id="securite" class="trade">
       <span class="mono trade__num">05</span>
-      <h2 class="dsp trade__title">Vidéosurveillance &amp; contrôle d'accès</h2>
+      <h2 class="dsp trade__title">Vidéo&shy;surveillance &amp; contrôle d'accès</h2>
       <div class="trade__body">
         <p>Pour les entreprises et les domiciles : étude du site, installation, consultation à distance et maintenance. Intégrée d'origine dans nos villas.</p>
         <span class="mono trade__tags">Caméras · Badges · Domotique</span>
